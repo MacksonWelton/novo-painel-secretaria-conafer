@@ -23,6 +23,7 @@ import Login from "views/Login/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 import Contratos from "views/Contratos/Contratos";
+import Colaboradores from "views/Colaboradores/Colaboradores";
 
 var routes = [
   {
@@ -37,6 +38,12 @@ var routes = [
     name: "Contratos",
     icon: "ni ni-single-copy-04 text-green",
     component: Contratos,
+    layout: "/admin",
+  },  {
+    path: "/colaboradores",
+    name: "Colaboradores",
+    icon: "ni ni-single-copy-04 text-green",
+    component: Colaboradores,
     layout: "/admin",
   },
   {
