@@ -18,12 +18,13 @@ import {
   Row,
   Modal,
   Button,
-  Input,
-  Form,
   ModalHeader,
   ModalBody,
   ModalFooter,
-  FormGroup,
+  Nav,
+  NavItem,
+  NavLink,
+  Form,
 } from "reactstrap";
 
 import Header from "components/Headers/Header.js";
@@ -32,6 +33,8 @@ import ColaboradoresData from "./ColaboradoresData";
 import { CardHeaderStyled, InputStyled, Tr } from "./styles";
 import ProgressCard from "../../components/ProgressCard/ProgressCard";
 import { newEmployees } from "redux/actions/Colaboradores";
+import Colaborador from "components/Colaborador/Colaborador";
+import EditarColaborador from "components/Colaborador/EditarColaborador";
 
 const Colaboradores = () => {
   const dispatch = useDispatch();
@@ -41,30 +44,53 @@ const Colaboradores = () => {
   }, [dispatch]);
 
   const [open, setOpen] = useState(false);
-  const [employees, setemployees] = useState({});
-  const [input, setInput] = useState();
+  const [employee, setEmployee] = useState({});
+  const [tab, setTab] = useState("Dados");
+  const [input, setInput] = useState({
+    photo: "",
+    name: "",
+    dateBirth: "",
+    sex: "",
+    education: "",
+    position: "",
+    salary: "",
+    cpf: "",
+    rg: "",
+    district: "",
+    admission_date: "",
+    emission_date: "",
+    organ_issuing: "",
+    voter_title: "",
+    electoral_zone: "",
+    section: "",
+    email: "",
+    citizenship: "",
+    address: "",
+    cep: "",
+    city: "",
+    state: undefined,
+    marital_status: undefined,
+  });
 
   const handleChangeInput = (event) => {
-    setInput(event.target.value);
+    const { name, value } = event.target;
+    setInput({ ...input, [name]: value });
   };
 
   const submitForm = (event) => {
     event.preventDefault();
-    dispatch(newComment(input));
   };
 
-  const employees = useSelector((state) => state.employeesReducer.employees);
+  const employees = useSelector((state) => state.EmployeesReducer.employees);
 
   const getBadge = (status) => {
     switch (status) {
-      case "Assinado":
-        return "bg-success";
-      case "Inactive":
-        return "bg-secondary";
-      case "Pendente":
+      case "Ativo/a":
         return "bg-blue";
-      case "Encerrado":
-        return "bg-cancelados";
+      case "Inativo/a":
+        return "bg-secondary";
+      case "Banido/a":
+        return "bg-red";
       default:
         return "primary";
     }
@@ -72,34 +98,36 @@ const Colaboradores = () => {
 
   const CardData = [
     {
-      title: "Pendentes",
-      progress: employeess.filter((employees) => employees.status === "Pendente")
+      title: "Ativos/as",
+      progress: employees.filter((employees) => employees.status === "Ativo/a")
         .length,
-      max: employeess.length,
-      icon: "fas fa-stopwatch",
+      max: employees.length,
+      icon: "fas fa-user-check",
       color: "blue",
     },
     {
-      title: "Cancelados",
-      progress: employeess.filter((employees) => employees.status === "Cancelados")
-        .length,
-      max: employeess.length,
-      icon: "fas fa-times",
-      color: "red",
+      title: "Inativos/as",
+      progress: employees.filter(
+        (employees) => employees.status === "Inativo/a"
+      ).length,
+      max: employees.length,
+      icon: "fas fa-user-times",
+      color: "gray",
     },
     {
-      title: "Assinados",
-      progress: employeess.filter((employees) => employees.status === "Assinado")
+      title: "Banidos/as",
+      progress: employees.filter((employees) => employees.status === "Banido/a")
         .length,
-      max: employeess.length,
-      icon: "fas fa-check",
-      color: "green",
+      max: employees.length,
+      icon: "fas fa-user-alt-slash",
+      color: "red",
     },
   ];
 
   return (
     <>
       <Header children={<ProgressCard CardData={CardData} />} />
+      
       <Container className="mt--7" fluid>
         <Row className="mt-5">
           <div className="col">
@@ -122,31 +150,33 @@ const Colaboradores = () => {
               >
                 <thead className="thead-dark">
                   <tr>
-                    <th scope="col">Contrato</th>
-                    <th scope="col">Valor</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Nascimento</th>
+                    <th scope="col">Cargo</th>
+                    <th scope="col">Endereço</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Criado em</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {employeess.map((employees, index) => (
+                  {employees.map((employees, index) => (
                     <Tr
                       key={index}
                       onClick={() => {
                         setOpen(!open);
-                        setemployees(employees);
+                        setEmployee(employees);
                       }}
                     >
                       <td>{employees.name}</td>
-                      <td>{employees.value}</td>
+                      <td>{employees.dateBirth}</td>
+                      <td>{employees.position}</td>
+                      <td>{employees.address}</td>
                       <td>
                         <Badge color="" className="badge-dot">
                           <i className={getBadge(employees.status)} />
                           {employees.status}
                         </Badge>
                       </td>
-                      <td>{employees.createdIn}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
@@ -256,10 +286,43 @@ const Colaboradores = () => {
             setOpen(!open);
           }}
         >
-         
+          Colaborador
         </ModalHeader>
         <ModalBody>
-          
+          <Nav tabs className="mb-3">
+            <NavItem>
+              <NavLink
+                href="#"
+                onClick={() => setTab("Dados")}
+                active={tab === "Dados"}
+              >
+                Dados
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                href="#"
+                onClick={() => {
+                  setInput(employee);
+                  setTab("Editar");
+                }}
+                active={tab === "Editar"}
+              >
+                Editar
+              </NavLink>
+            </NavItem>
+          </Nav>
+          {tab === "Dados" ? (
+            <Colaborador employee={employee} />
+          ) : (
+            <Form onSubmit={submitForm}>
+              <EditarColaborador
+                title="Editar Dados"
+                input={input}
+                handleChangeInput={handleChangeInput}
+              />
+            </Form>
+          )}
         </ModalBody>
         <ModalFooter className="d-flex justify-content-end">
           <Button color="secondary" onClick={() => setOpen(!open)}>
