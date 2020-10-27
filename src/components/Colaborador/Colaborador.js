@@ -12,7 +12,7 @@ const Colaborador = ({ employee }) => {
         </Row>
       </CardHeader>
       <Row className="d-flex justify-content-center mb-4">
-        <img className="w-25 rounded-circle" src={employee.photo} alt="..." />
+        <img className="w-25 rounded" src={employee.photo} alt="..." />
       </Row>
       <CardBody>
         <>

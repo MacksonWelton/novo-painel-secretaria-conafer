@@ -17,8 +17,3 @@ export const InputStyled = styled(Input)`
 export const Tr = styled.tr`
   cursor: pointer;
 `;
-
-export const ImgProfile = styled.img`
-  width: 250px;
-  height: 250px;
-`;

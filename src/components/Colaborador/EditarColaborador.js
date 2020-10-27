@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Button,
   Card,
   CardBody,
   CardHeader,
@@ -12,7 +11,14 @@ import {
 
 import { mask } from "remask";
 
-const EditarColaborador = ({ title, input, handleChangeInput }) => {
+const EditarColaborador = ({
+  title,
+  input,
+  handleChangeInput,
+  handleSelectFile,
+  newPhoto,
+}) => {
+
   return (
     <Card className="bg-secondary shadow">
       <CardHeader className="bg-white border-0">
@@ -24,6 +30,37 @@ const EditarColaborador = ({ title, input, handleChangeInput }) => {
       </CardHeader>
       <CardBody>
         <>
+          <h6 className="heading-small text-muted mb-4">Foto de Perfil</h6>
+          <div className="pl-lg-4">
+            <Row>
+              <Col lg="3">
+                <FormGroup> 
+                    <img
+                      className="w-100 rounded"
+                      src={
+                        newPhoto.photo
+                          ? URL.createObjectURL(input.photo)
+                          : input.photo
+                      }
+                      alt="..."
+                    />
+                </FormGroup>
+              </Col>
+              <Col lg="9" className="d-flex align-items-center">
+                <FormGroup>
+                  <label className="btn bg-light ml-1">
+                    Selecione uma Foto de Perfil
+                    <Input
+                      className="d-none"
+                      type="file"
+                      onChange={handleSelectFile}
+                      accept="image/*"
+                    />
+                  </label>
+                </FormGroup>
+              </Col>
+            </Row>
+          </div>
           <h6 className="heading-small text-muted mb-4">Dados Pessoais</h6>
           <div className="pl-lg-4">
             <Row>
@@ -84,7 +121,7 @@ const EditarColaborador = ({ title, input, handleChangeInput }) => {
               </Col>
               <Col lg="6">
                 <FormGroup>
-                  <label className="form-control-label" htmlFor="maritalStatus">
+                  <label className="form-control-label" htmlFor="marital_status">
                     Estado Civil
                   </label>
                   <Input
@@ -98,9 +135,9 @@ const EditarColaborador = ({ title, input, handleChangeInput }) => {
                     <option value={undefined} hidden>
                       Escolha uma opção
                     </option>
-                    <option value="Solteiro">Solteiro</option>
-                    <option value="Casado">Casado</option>
-                    <option value="Divorciado/Separado">
+                    <option value="Solteiro(a)">Solteiro(a)</option>
+                    <option value="Casado(a)">Casado(a)</option>
+                    <option value="Divorciado(a)/Separado(a)">
                       Divorciado/Separado
                     </option>
                     <option value="Viúvo">Viúvo</option>
@@ -272,6 +309,7 @@ const EditarColaborador = ({ title, input, handleChangeInput }) => {
                     id="address"
                     name="address"
                     value={input.address}
+                    onChange={handleChangeInput}
                     placeholder="Ex: Rua Tavares Bastos"
                     type="text"
                   />
@@ -289,6 +327,7 @@ const EditarColaborador = ({ title, input, handleChangeInput }) => {
                     name="cep"
                     id="cep"
                     value={input.cep}
+                    onChange={handleChangeInput}
                     placeholder="Ex: 57600000"
                     type="text"
                   />
@@ -296,14 +335,15 @@ const EditarColaborador = ({ title, input, handleChangeInput }) => {
               </Col>
               <Col lg="4">
                 <FormGroup>
-                  <label className="form-control-label" htmlFor="cirty">
+                  <label className="form-control-label" htmlFor="city">
                     Cidade
                   </label>
                   <Input
                     className="form-control-alternative"
-                    id="state"
+                    id="city"
                     name="city"
                     value={input.city}
+                    onChange={handleChangeInput}
                     placeholder="Ex: São Paulo"
                     type="text"
                   />
