@@ -21,83 +21,54 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Nav,
-  NavItem,
-  NavLink,
+  FormGroup,
+  Input,
   Form,
+  Col,
 } from "reactstrap";
 
 import Header from "components/Headers/Header.js";
 
-import ColaboradoresData from "./ColaboradoresData";
-import { CardHeaderStyled, InputStyled, Tr } from "./Styles";
-import ProgressCard from "../../components/ProgressCard/ProgressCard";
-import { newEmployees } from "redux/actions/Colaboradores";
-import Colaborador from "components/Colaborador/Colaborador";
-import EditarColaborador from "components/Colaborador/EditarColaborador";
+import { newProjects, setProject } from "../../redux/actions/Projetos";
 
-const Colaboradores = () => {
+import ProjetosData from "./ProjetosData";
+import ProgressCard from "components/ProgressCard/ProgressCard";
+import { Tr } from "./Styles";
+import { InputStyled } from "./Styles";
+import { CardHeaderStyled } from "./Styles";
+import { useHistory } from "react-router-dom";
+
+const Projetos = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
-    dispatch(newEmployees(ColaboradoresData));
+    dispatch(newProjects(ProjetosData));
   }, [dispatch]);
 
   const [open, setOpen] = useState(false);
-  const [employee, setEmployee] = useState({});
-  const [tab, setTab] = useState("Dados");
+  const [projectInfo, setProjectInfo] = useState({});
   const [input, setInput] = useState({
-    photo: "",
-    name: "",
-    dateBirth: "",
-    sex: "",
-    education: "",
-    position: "",
-    salary: "",
-    cpf: "",
-    rg: "",
-    district: "",
-    admission_date: "",
-    emission_date: "",
-    organ_issuing: "",
-    voter_title: "",
-    electoral_zone: "",
-    section: "",
-    email: "",
-    citizenship: "",
-    address: "",
-    cep: "",
-    city: "",
-    state: undefined,
-    marital_status: undefined,
+    description: "",
   });
-
-  const [newPhoto, setNewPhoto] = useState(true);
 
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
-    setInput({ ...input, [name]: value });
+    setInput({...input, [name]: value});
   };
 
-  const handleSelectFile = (event) => {
-    setInput({ ...input, photo: event.target.files[0] });
-    setNewPhoto(!newPhoto);
-  }
-
-  const submitForm = (event) => {
-    event.preventDefault();
-  };
-
-  const employees = useSelector((state) => state.EmployeesReducer.employees);
+  const projects = useSelector((state) => state.ProjectsReducer.projects);
 
   const getBadge = (status) => {
     switch (status) {
-      case "Ativo/a":
+      case "Em andamento":
         return "bg-blue";
-      case "Inativo/a":
-        return "bg-secondary";
-      case "Banido/a":
+      case "Atrasado":
+        return "bg-yellow";
+      case "Cancelado":
         return "bg-red";
+      case "Concluído":
+        return "bg-green";
       default:
         return "primary";
     }
@@ -105,42 +76,54 @@ const Colaboradores = () => {
 
   const CardData = [
     {
-      title: "Ativos/as",
-      progress: employees.filter((employees) => employees.status === "Ativo/a")
-        .length,
-      max: employees.length,
-      icon: "fas fa-user-check",
+      title: "Em andamento",
+      progress: projects.filter(
+        (contract) => contract.status === "Em andamento"
+      ).length,
+      max: projects.length,
+      icon: "fas fa-clock",
       color: "blue",
     },
     {
-      title: "Inativos/as",
-      progress: employees.filter(
-        (employees) => employees.status === "Inativo/a"
+      title: "Esperando Resposta",
+      progress: projects.filter(
+        (contract) => contract.status === "Esperando Resposta"
       ).length,
-      max: employees.length,
-      icon: "fas fa-user-times",
-      color: "gray",
+      max: projects.length,
+      icon: "fas fa-pause-circle",
+      color: "yellow",
     },
     {
-      title: "Banidos/as",
-      progress: employees.filter((employees) => employees.status === "Banido/a")
+      title: "Cancelados",
+      progress: projects.filter((contract) => contract.status === "Cancelado")
         .length,
-      max: employees.length,
-      icon: "fas fa-user-alt-slash",
+      max: projects.length,
+      icon: "fas fa-times",
       color: "red",
     },
+    {
+      title: "Concluídos",
+      progress: projects.filter((contract) => contract.status === "Concluído")
+        .length,
+      max: projects.length,
+      icon: "fas fa-check",
+      color: "green",
+    },
   ];
+
+  const handleSubmitForm = (event) => {
+    event.preventDefault();
+  };
 
   return (
     <>
       <Header children={<ProgressCard CardData={CardData} />} />
-      
       <Container className="mt--7" fluid>
         <Row className="mt-5">
           <div className="col">
             <Card className="bg-default shadow">
               <CardHeaderStyled>
-                <h3 className="text-white mb-0">Lista de Colaboradores</h3>
+                <h3 className="text-white mb-0">Lista de Projetos</h3>
                 <div className="d-flex align-items-center">
                   <InputStyled type="text" placeholder="Pesquisar..." />
                   <Button className="bg-transparent border-0">
@@ -148,7 +131,9 @@ const Colaboradores = () => {
                   </Button>
                 </div>
                 <div>
-                  <Button color="primary">Adicionar</Button>
+                  <Button color="primary" onClick={() => setOpen(!open)}>
+                    Adicionar
+                  </Button>
                 </div>
               </CardHeaderStyled>
               <Table
@@ -157,33 +142,33 @@ const Colaboradores = () => {
               >
                 <thead className="thead-dark">
                   <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Nascimento</th>
-                    <th scope="col">Cargo</th>
-                    <th scope="col">Endereço</th>
+                    <th scope="col">Projeto</th>
+                    <th scope="col">Descrição</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Data de Início</th>
+                    <th scope="col">Data de Entrega</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {employees.map((employees, index) => (
+                  {projects.map((project, index) => (
                     <Tr
                       key={index}
                       onClick={() => {
-                        setOpen(!open);
-                        setEmployee(employees);
+                        dispatch(setProject(project));
+                        history.push("/admin/projeto");
                       }}
                     >
-                      <td>{employees.name}</td>
-                      <td>{employees.dateBirth}</td>
-                      <td>{employees.position}</td>
-                      <td>{employees.address}</td>
+                      <td>{project.name}</td>
+                      <td>{project.description}</td>
                       <td>
                         <Badge color="" className="badge-dot">
-                          <i className={getBadge(employees.status)} />
-                          {employees.status}
+                          <i className={getBadge(project.status)} />
+                          {project.status}
                         </Badge>
                       </td>
+                      <td>{project.start_date}</td>
+                      <td>{project.delivery_date}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
@@ -293,55 +278,106 @@ const Colaboradores = () => {
             setOpen(!open);
           }}
         >
-          Colaborador
+          Criar novo projeto
         </ModalHeader>
-        <ModalBody>
-          <Nav tabs className="mb-3">
-            <NavItem>
-              <NavLink
-                href="#"
-                onClick={() => setTab("Dados")}
-                active={tab === "Dados"}
-              >
-                Dados
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                href="#"
-                onClick={() => {
-                  setInput(employee);
-                  setTab("Editar");
-                  setNewPhoto(!newPhoto)
-                }}
-                active={tab === "Editar"}
-              >
-                Editar
-              </NavLink>
-            </NavItem>
-          </Nav>
-          {tab === "Dados" ? (
-            <Colaborador employee={employee} />
-          ) : (
-            <Form onSubmit={submitForm}>
-              <EditarColaborador
-                title="Editar Dados"
-                input={input}
-                handleChangeInput={handleChangeInput}
-                handleSelectFile={handleSelectFile}
-                newPhoto={newPhoto}
-              />
-            </Form>
-          )}
-        </ModalBody>
-        <ModalFooter className="d-flex justify-content-end">
-          <Button color="secondary" onClick={() => setOpen(!open)}>
-            Sair
-          </Button>
-        </ModalFooter>
+        <Form onSubmit={handleSubmitForm}>
+          <ModalBody>
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <Input
+                    className="form-control-alternative"
+                    type="text"
+                    name="title"
+                    onChange={handleChangeInput}
+                    placeholder="Digite um título para o seu projeto"
+                    required
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="12">
+                <FormGroup>
+                  <Input
+                    className="form-control-alternative"
+                    type="textarea"
+                    rows="8"
+                    name="description"
+                    value={input.description}
+                    onChange={handleChangeInput}
+                    placeholder="Adicione uma descrição mais detalhada para seu projeto..."
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="3">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="start_date">
+                    Data de Início
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    type="date"
+                    name="start_date"
+                    onChange={handleChangeInput}
+                    required
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="3">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="start_time">
+                    Horário de Início
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    type="time"
+                    name="start_time"
+                    onChange={handleChangeInput}
+                    required
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="3">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="delivery_date">
+                    Data de Entrega
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    type="date"
+                    onChange={handleChangeInput}
+                    name="delivery_date"
+                    required
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="3">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="end_time">
+                    Horário de Entrega
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    type="time"
+                    name="end_time"
+                    onChange={handleChangeInput}
+                    required
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+          </ModalBody>
+          <ModalFooter className="d-flex justify-content-end">
+            <Button color="primary" type="submit">
+              Criar novo projeto
+            </Button>
+            <Button color="secondary" onClick={() => setOpen(!open)}>
+              Sair
+            </Button>
+          </ModalFooter>
+        </Form>
       </Modal>
     </>
   );
 };
 
-export default Colaboradores;
+export default Projetos;

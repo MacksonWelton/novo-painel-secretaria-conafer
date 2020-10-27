@@ -81,19 +81,26 @@ class Sidebar extends React.Component {
   // creates the links that appear in the left menu / Sidebar
   createLinks = routes => {
     return routes.map((prop, key) => {
-      return (
-        <NavItem key={key}>
-          <NavLink
-            to={prop.layout + prop.path}
-            tag={NavLinkRRD}
-            onClick={this.closeCollapse}
-            activeClassName="active"
-          >
-            <i className={prop.icon} />
-            {prop.name}
-          </NavLink>
-        </NavItem>
-      );
+
+      if (prop.show) {
+
+        return (
+          <NavItem key={key}>
+            <NavLink
+              to={prop.layout + prop.path}
+              tag={NavLinkRRD}
+              onClick={this.closeCollapse}
+              activeClassName="active"
+            >
+              <i className={prop.icon} />
+              {prop.name}
+            </NavLink>
+          </NavItem>
+        );
+      } else {
+        return null;
+      }
+
     });
   };
   render() {
@@ -165,28 +172,20 @@ class Sidebar extends React.Component {
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-arrow" right>
                 <DropdownItem className="noti-title" header tag="div">
-                  <h6 className="text-overflow m-0">Welcome!</h6>
+                  <h6 className="text-overflow m-0">Bem-vindo(a)!</h6>
                 </DropdownItem>
                 <DropdownItem to="/admin/user-profile" tag={Link}>
                   <i className="ni ni-single-02" />
-                  <span>My profile</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-settings-gear-65" />
-                  <span>Settings</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-calendar-grid-58" />
-                  <span>Activity</span>
+                  <span>Meu Perfil</span>
                 </DropdownItem>
                 <DropdownItem to="/admin/user-profile" tag={Link}>
                   <i className="ni ni-support-16" />
-                  <span>Support</span>
+                  <span>Suporte</span>
                 </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
                   <i className="ni ni-user-run" />
-                  <span>Logout</span>
+                  <span>Sair</span>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
@@ -227,7 +226,7 @@ class Sidebar extends React.Component {
                 <Input
                   aria-label="Search"
                   className="form-control-rounded form-control-prepended"
-                  placeholder="Search"
+                  placeholder="Pesquisar"
                   type="search"
                 />
                 <InputGroupAddon addonType="prepend">
@@ -239,39 +238,6 @@ class Sidebar extends React.Component {
             </Form>
             {/* Navigation */}
             <Nav navbar>{this.createLinks(routes)}</Nav>
-            {/* Divider */}
-            <hr className="my-3" />
-            {/* Heading */}
-            <h6 className="navbar-heading text-muted">Documentation</h6>
-            {/* Navigation */}
-            <Nav className="mb-md-3" navbar>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/overview?ref=adr-admin-sidebar">
-                  <i className="ni ni-spaceship" />
-                  Getting started
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/colors?ref=adr-admin-sidebar">
-                  <i className="ni ni-palette" />
-                  Foundation
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/alerts?ref=adr-admin-sidebar">
-                  <i className="ni ni-ui-04" />
-                  Components
-                </NavLink>
-              </NavItem>
-            </Nav>
-            <Nav className="mb-md-3" navbar>
-              <NavItem className="active-pro active">
-                <NavLink href="https://www.creative-tim.com/product/argon-dashboard-pro-react?ref=adr-admin-sidebar">
-                  <i className="ni ni-spaceship" />
-                  Upgrade to PRO
-                </NavLink>
-              </NavItem>
-            </Nav>
           </Collapse>
         </Container>
       </Navbar>

@@ -16,17 +16,21 @@
 
 */
 import Index from "views/Index.js";
-import Profile from "views/examples/Profile.js";
+import Profile from "views/Perfil/Perfil.js";
 import Maps from "views/examples/Maps.js";
 import Register from "views/examples/Register.js";
 import Login from "views/Login/Login.js";
 import Tables from "views/examples/Tables.js";
-import Icons from "views/examples/Icons.js";
+
 import Contratos from "views/Contratos/Contratos";
 import Colaboradores from "views/Colaboradores/Colaboradores";
+import Orcamentos from "views/Orcamentos/Orcamentos";
+import Projetos from "views/Projetos/Projetos";
+import Projeto from "views/Projetos/Projeto/Projeto";
 
 var routes = [
   {
+    show: true,
     path: "/index",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
@@ -34,26 +38,47 @@ var routes = [
     layout: "/admin",
   },
   {
+    show: true,
     path: "/contratos",
     name: "Contratos",
     icon: "ni ni-single-copy-04 text-green",
     component: Contratos,
     layout: "/admin",
-  },  {
+  },
+  {
+    show: true,
     path: "/colaboradores",
     name: "Colaboradores",
-    icon: "ni ni-single-copy-04 text-green",
+    icon: "fas fa-users text-black",
     component: Colaboradores,
     layout: "/admin",
   },
   {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-planet text-blue",
-    component: Icons,
+    show: true,
+    path: "/orcamentos",
+    name: "Orçamentos",
+    icon: "fas fa-coins text-yellow",
+    component: Orcamentos,
     layout: "/admin",
   },
   {
+    show: true,
+    path: "/projetos",
+    name: "Projetos",
+    icon: "fas fa-project-diagram text-info",
+    component: Projetos,
+    layout: "/admin",
+  },
+  {
+    show: false,
+    path: "/projeto",
+    name: "Projeto",
+    icon: "fas fa-project-diagram text-info",
+    component: Projeto,
+    layout: "/admin",
+  },
+  {
+    show: true,
     path: "/maps",
     name: "Maps",
     icon: "ni ni-pin-3 text-orange",
@@ -61,13 +86,15 @@ var routes = [
     layout: "/admin",
   },
   {
+    show: true,
     path: "/user-profile",
-    name: "User Profile",
+    name: "Meu Perfil",
     icon: "ni ni-single-02 text-yellow",
     component: Profile,
     layout: "/admin",
   },
   {
+    show: true,
     path: "/tables",
     name: "Tables",
     icon: "ni ni-bullet-list-67 text-red",
@@ -75,6 +102,7 @@ var routes = [
     layout: "/admin",
   },
   {
+    show: true,
     path: "/login",
     name: "Login",
     icon: "ni ni-key-25 text-info",
@@ -82,6 +110,7 @@ var routes = [
     layout: "/auth",
   },
   {
+    show: true,
     path: "/register",
     name: "Register",
     icon: "ni ni-circle-08 text-pink",
