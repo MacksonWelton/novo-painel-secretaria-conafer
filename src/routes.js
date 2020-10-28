@@ -36,22 +36,28 @@ var routes = [
     icon: "ni ni-tv-2 text-primary",
     component: Index,
     layout: "/admin",
-  },
-  {
-    show: true,
-    path: "/contratos",
-    name: "Contratos",
-    icon: "ni ni-single-copy-04 text-green",
-    component: Contratos,
-    layout: "/admin",
-  },
-  {
-    show: true,
-    path: "/colaboradores",
-    name: "Colaboradores",
-    icon: "fas fa-users text-black",
-    component: Colaboradores,
-    layout: "/admin",
+  },{
+    dropdown: true,
+    title: "Gerenciar Secretaria",
+    icon: "fas fa-landmark text-red",
+    items: [
+      {
+        show: true,
+        path: "/contratos",
+        name: "Contratos",
+        icon: "ni ni-single-copy-04 text-green",
+        component: Contratos,
+        layout: "/admin",
+      },
+      {
+        show: true,
+        path: "/colaboradores",
+        name: "Colaboradores",
+        icon: "fas fa-users text-black",
+        component: Colaboradores,
+        layout: "/admin",
+      },
+    ]
   },
   {
     show: true,
@@ -79,14 +85,6 @@ var routes = [
   },
   {
     show: true,
-    path: "/maps",
-    name: "Maps",
-    icon: "ni ni-pin-3 text-orange",
-    component: Maps,
-    layout: "/admin",
-  },
-  {
-    show: true,
     path: "/user-profile",
     name: "Meu Perfil",
     icon: "ni ni-single-02 text-yellow",
@@ -94,15 +92,22 @@ var routes = [
     layout: "/admin",
   },
   {
-    show: true,
-    path: "/tables",
-    name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
-    layout: "/admin",
+    dropdown: true,
+    title: "Afiliados",
+    icon: "fas fa-city text-red",
+    items: [
+      {
+        show: true,
+        path: "/register",
+        name: "Register",
+        icon: "ni ni-circle-08 text-pink",
+        component: Register,
+        layout: "/auth",
+      },
+    ],
   },
   {
-    show: true,
+    show: false,
     path: "/login",
     name: "Login",
     icon: "ni ni-key-25 text-info",
@@ -110,7 +115,7 @@ var routes = [
     layout: "/auth",
   },
   {
-    show: true,
+    show: false,
     path: "/register",
     name: "Register",
     icon: "ni ni-circle-08 text-pink",
