@@ -49,14 +49,16 @@ import {
   Table,
   Container,
   Row,
-  Col
+  Col,
+  Dropdown,
 } from "reactstrap";
 
 var ps;
 
 class Sidebar extends React.Component {
   state = {
-    collapseOpen: false
+    collapseOpen: false,
+    dropdownOpen: false,
   };
   constructor(props) {
     super(props);
@@ -69,21 +71,24 @@ class Sidebar extends React.Component {
   // toggles collapse between opened and closed (true/false)
   toggleCollapse = () => {
     this.setState({
-      collapseOpen: !this.state.collapseOpen
+      collapseOpen: !this.state.collapseOpen,
     });
   };
   // closes the collapse
   closeCollapse = () => {
     this.setState({
-      collapseOpen: false
+      collapseOpen: false,
     });
   };
+
+  toggle = () => {
+    this.setState({ dropdownOpen: !this.state.dropdownOpen });
+  };
+
   // creates the links that appear in the left menu / Sidebar
-  createLinks = routes => {
+  createLinks = (routes) => {
     return routes.map((prop, key) => {
-
       if (prop.show) {
-
         return (
           <NavItem key={key}>
             <NavLink
@@ -97,24 +102,50 @@ class Sidebar extends React.Component {
             </NavLink>
           </NavItem>
         );
+      } else if (prop.dropdown) {
+        return (
+          <Dropdown nav isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+            <DropdownToggle nav caret>
+              <i className={prop.icon} />
+              {prop.title}
+            </DropdownToggle>
+            <DropdownMenu>
+              {prop.items.map((item, key) => {
+                return (
+                  <NavItem key={key}>
+                    <NavLink
+                      to={item.layout + item.path}
+                      tag={NavLinkRRD}
+                      onClick={this.closeCollapse}
+                      activeClassName="active"
+                    >
+                      <i className={item.icon} />
+                      {item.name}
+                    </NavLink>
+                  </NavItem>
+                );
+              })}
+            </DropdownMenu>
+          </Dropdown>
+        );
       } else {
         return null;
       }
-
     });
   };
+
   render() {
     const { bgColor, routes, logo } = this.props;
     let navbarBrandProps;
     if (logo && logo.innerLink) {
       navbarBrandProps = {
         to: logo.innerLink,
-        tag: Link
+        tag: Link,
       };
     } else if (logo && logo.outterLink) {
       navbarBrandProps = {
         href: logo.outterLink,
-        target: "_blank"
+        target: "_blank",
       };
     }
     return (
@@ -183,7 +214,7 @@ class Sidebar extends React.Component {
                   <span>Suporte</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
                   <i className="ni ni-user-run" />
                   <span>Sair</span>
                 </DropdownItem>
@@ -246,7 +277,7 @@ class Sidebar extends React.Component {
 }
 
 Sidebar.defaultProps = {
-  routes: [{}]
+  routes: [{}],
 };
 
 Sidebar.propTypes = {
@@ -262,8 +293,8 @@ Sidebar.propTypes = {
     // the image src of the logo
     imgSrc: PropTypes.string.isRequired,
     // the alt for the img
-    imgAlt: PropTypes.string.isRequired
-  })
+    imgAlt: PropTypes.string.isRequired,
+  }),
 };
 
 export default Sidebar;
