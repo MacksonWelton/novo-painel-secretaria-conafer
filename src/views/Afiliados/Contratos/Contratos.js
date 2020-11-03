@@ -24,15 +24,16 @@ import {
   ModalBody,
   ModalFooter,
   FormGroup,
+  Col,
 } from "reactstrap";
 
-import Header from "components/Headers/Header.js";
+import Header from "../../../components/Headers/Header";
 
-import { newComment, newContracts } from "../../redux/actions/Contratos";
+import { newComment, newContracts } from "../../../redux/actions/Contratos";
 
 import ContratosData from "./ContratosData";
 import { CardHeaderStyled, InputStyled, Tr } from "./styles";
-import ProgressCard from "components/ProgressCard/ProgressCard";
+import ProgressCard from "../../../components/ProgressCard/ProgressCard";
 
 const Contratos = () => {
   const dispatch = useDispatch();
@@ -42,16 +43,34 @@ const Contratos = () => {
   }, [dispatch]);
 
   const [open, setOpen] = useState(false);
+  const [openAddContract, setOpenAddContract] = useState(false);
   const [contract, setContract] = useState({});
-  const [input, setInput] = useState();
+  const [addComment, setAddComment] = useState({
+    value: "",
+    id: "",
+  });
 
-  const handleChangeInput = (event) => {
-    setInput(event.target.value);
-  };
+  const [input, setInput] = useState({
+    contract: "",
+    description: "",
+  });
 
   const submitForm = (event) => {
     event.preventDefault();
-    dispatch(newComment(input));
+  };
+
+  const handleChangeInput = (event) => {
+    const { name, value } = event.target;
+    setInput({ ...input, [name]: value });
+  };
+
+  const handleChangeInputAddComment = (event, id) => {
+    setAddComment({ ...addComment, id: id, value: event.target.value });
+  };
+
+  const submitFormComment = (event) => {
+    event.preventDefault();
+    dispatch(newComment(addComment));
   };
 
   const contracts = useSelector((state) => state.ContractsReducer.contracts);
@@ -114,7 +133,12 @@ const Contratos = () => {
                   </Button>
                 </div>
                 <div>
-                  <Button color="primary">Adicionar</Button>
+                  <Button
+                    color="primary"
+                    onClick={() => setOpenAddContract(!openAddContract)}
+                  >
+                    Adicionar
+                  </Button>
                 </div>
               </CardHeaderStyled>
               <Table
@@ -271,7 +295,7 @@ const Contratos = () => {
                   key={index}
                   className={
                     comment.mainComment !== null
-                      ? "p-3 rounded bg-default text-white"
+                      ? "p-3 mb-3 rounded bg-default text-white"
                       : "p-3 mb-3 rounded bg-light"
                   }
                 >
@@ -288,12 +312,14 @@ const Contratos = () => {
                   </p>
                 </div>
               ))}
-            <Form onSubmit={submitForm}>
+            <Form onSubmit={submitFormComment}>
               <FormGroup>
                 <Input
                   className="form-control-alternative"
                   placeholder="Digite uma nova resposta..."
-                  onChange={handleChangeInput}
+                  onChange={(event) =>
+                    handleChangeInputAddComment(event, contract.id)
+                  }
                   rows="4"
                   type="textarea"
                 />
@@ -311,6 +337,91 @@ const Contratos = () => {
             Sair
           </Button>
         </ModalFooter>
+      </Modal>
+      <Modal
+        isOpen={openAddContract}
+        toggle={() => {
+          setOpenAddContract(!openAddContract);
+        }}
+        size="lg"
+      >
+        <ModalHeader
+          toggle={() => {
+            setOpenAddContract(!openAddContract);
+          }}
+        >
+          Adicionar Novo Contrato
+        </ModalHeader>
+        <Form onSubmit={submitForm}>
+          <ModalBody>
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="contract">
+                    Título do Contrato
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    name="contract"
+                    onChange={handleChangeInput}
+                    placeholder="Ex: Contrato de Aluguel de Caminhão"
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="3">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="startDate">
+                    Data de Início
+                  </label>
+                  <Input 
+                    type="date"
+                    className="form-control-alternative"
+                    name="startDate"
+                    onChange={handleChangeInput}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="3">
+                <FormGroup>
+                <label className="form-control-label" htmlFor="endDate">
+                    Data de Encerramento
+                  </label>
+                  <Input 
+                    type="date"
+                    className="form-control-alternative"
+                    name="endDate"
+                    onChange={handleChangeInput}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="12">
+                <FormGroup>
+                  <label className="form-control-label">Descrição</label>
+                  <Input 
+                    type="textarea"
+                    className="form-control-alternative"
+                    rows="6"
+                    onChange={handleChangeInput}
+                    placeholder="Adicione uma descrição mais detalhada para este contrato."
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+          </ModalBody>
+          <ModalFooter>
+            <Button type="button" color="primary">
+              Adicionar
+            </Button>
+            <Button
+              color="secondary"
+              onClick={() => {
+                setOpenAddContract(!openAddContract);
+              }}
+            >
+              Cancelar
+            </Button>
+          </ModalFooter>
+        </Form>
       </Modal>
     </>
   );
