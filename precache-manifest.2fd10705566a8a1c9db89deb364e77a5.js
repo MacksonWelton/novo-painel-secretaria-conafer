@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a434a9eb67a39efce7d083fb8ad5818b",
+    "revision": "9ffcc996b5692db1d79958669a5a4317",
     "url": "/novo-painel-secretaria-conafer/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/novo-painel-secretaria-conafer/static/css/2.8a7664a6.chunk.css"
   },
   {
-    "revision": "696b100ad00b16be109a",
+    "revision": "0eabe41cd37199c082e7",
     "url": "/novo-painel-secretaria-conafer/static/css/main.2388cb6a.chunk.css"
   },
   {
@@ -20,12 +20,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/novo-painel-secretaria-conafer/static/js/2.edccce80.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "696b100ad00b16be109a",
-    "url": "/novo-painel-secretaria-conafer/static/js/main.43ada1fc.chunk.js"
+    "revision": "0eabe41cd37199c082e7",
+    "url": "/novo-painel-secretaria-conafer/static/js/main.2f417471.chunk.js"
   },
   {
     "revision": "8d0d562f4ec3c131ac27d52de65ecd17",
-    "url": "/novo-painel-secretaria-conafer/static/js/main.43ada1fc.chunk.js.LICENSE.txt"
+    "url": "/novo-painel-secretaria-conafer/static/js/main.2f417471.chunk.js.LICENSE.txt"
   },
   {
     "revision": "d764a5a1c57fd6edc43f",
