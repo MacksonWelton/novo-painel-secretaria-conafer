@@ -25,12 +25,12 @@ import {
   ModalFooter,
 } from "reactstrap";
 
-import Header from "components/Headers/Header.js";
+import Header from "../../components/Headers/Header";
 
 import { newBudgets, newComment } from "../../redux/actions/Orcamentos";
 
 import OrcamentosData from "./OrcamentosData";
-import ProgressCard from "components/ProgressCard/ProgressCard";
+import ProgressCard from "../../components/ProgressCard/ProgressCard";
 import { Tr } from "./Styles";
 import { InputStyled } from "./Styles";
 import { CardHeaderStyled } from "./Styles";
@@ -179,19 +179,7 @@ const Orcamentos = () => {
                               href="#pablo"
                               onClick={(e) => e.preventDefault()}
                             >
-                              Action
-                            </DropdownItem>
-                            <DropdownItem
-                              href="#pablo"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              Another action
-                            </DropdownItem>
-                            <DropdownItem
-                              href="#pablo"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              Something else here
+                              Excluir
                             </DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown>

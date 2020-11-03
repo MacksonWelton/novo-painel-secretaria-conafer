@@ -34,7 +34,17 @@ class Admin extends React.Component {
   }
   getRoutes = routes => {
     return routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
+
+      if (prop.dropdown) {
+        return prop.items.map((item, index)=> {
+          return (
+          <Route
+            path={item.layout + item.path}
+            component={item.component}
+            key={index}
+          />)
+        })
+      } else if (prop.layout === "/admin" && !prop.dropdown) {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -59,6 +69,7 @@ class Admin extends React.Component {
     }
     return "Brand";
   };
+  
   render() {
     return (
       <>

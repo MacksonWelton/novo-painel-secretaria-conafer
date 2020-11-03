@@ -53,6 +53,7 @@ const EditarColaborador = ({
                     <Input
                       className="d-none"
                       type="file"
+                      name="photo"
                       onChange={handleSelectFile}
                       accept="image/*"
                     />
@@ -115,6 +116,7 @@ const EditarColaborador = ({
                     name="dateBirth"
                     value={mask(input.dateBirth, ["99/99/9999"])}
                     onChange={handleChangeInput}
+                    placeholder="Ex: DD/MM/AAAA"
                     type="text"
                   />
                 </FormGroup>

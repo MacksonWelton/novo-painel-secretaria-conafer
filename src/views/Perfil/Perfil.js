@@ -29,6 +29,7 @@ const Perfil = () => {
     photo: "",
     cover: "",
   });
+  
   const [open, setOpen] = useState(false);
 
   useEffect(() => {

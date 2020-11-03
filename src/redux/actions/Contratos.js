@@ -20,3 +20,10 @@ export const newComment = (comment) => (dispatch) => {
     console.err(err.message);
   }
 };
+
+export const setComment = (comment) => ({
+  type: "SET_COMMENT",
+  payload: {
+    comment
+  }
+})

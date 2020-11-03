@@ -18,99 +18,58 @@ import {
   Row,
   Modal,
   Button,
+  Input,
+  Form,
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Nav,
-  NavItem,
-  NavLink,
-  Form,
+  FormGroup,
+  Col,
 } from "reactstrap";
 
-import Header from "../../components/Headers/Header";
+import Header from "../../../components/Headers/Header";
 
-import ColaboradoresData from "./ColaboradoresData";
-import { CardHeaderStyled, InputStyled, Tr } from "./Styles";
-import ProgressCard from "../../components/ProgressCard/ProgressCard";
-import { newEmployees } from "redux/actions/Colaboradores";
-import Colaborador from "components/Colaborador/Colaborador";
-import EditarColaborador from "components/Colaborador/EditarColaborador";
+import { newCharges } from "../../../redux/actions/Cobrancas";
 
-import user from "../../assets/img/theme/user.png";
+import CobrancasData from "./CobrancasData";
+import ProgressCard from "../../../components/ProgressCard/ProgressCard";
+import { Tr } from "./Styles";
+import { InputStyled } from "./Styles";
+import { CardHeaderStyled } from "./Styles";
 
-const Colaboradores = () => {
+const Orcamentos = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(newEmployees(ColaboradoresData));
+    dispatch(newCharges(CobrancasData));
   }, [dispatch]);
 
   const [open, setOpen] = useState(false);
-  const [employee, setEmployee] = useState({});
-  const [tab, setTab] = useState("Dados");
-  const [input, setInput] = useState({
-    photo: user,
-    name: "",
-    dateBirth: "",
-    sex: "",
-    education: "",
-    position: "",
-    salary: "",
-    cpf: "",
-    rg: "",
-    district: "",
-    admission_date: "",
-    emission_date: "",
-    organ_issuing: "",
-    voter_title: "",
-    electoral_zone: "",
-    section: "",
-    email: "",
-    citizenship: "",
-    address: "",
-    cep: "",
-    city: "",
-    state: undefined,
-    marital_status: undefined,
-  });
-
-  const [newPhoto, setNewPhoto] = useState(true);
-  const [openAddContract, setOpenAddContract] = useState(false);
+  const [openAddCharge, setOpenAddCharge] = useState(false);
+  const [charge, setCharge] = useState({});
+  const [input, setInput] = useState();
 
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
-    setInput({ ...input, [name]: value });
-  };
-
-  const handleSelectFile = (event) => {
-    const name = event.target.name;
-    const value = event.target.files[0];
-
-    if (value === undefined) {
-      setInput({ ...input, [name]: user });
-    } else {
-      setInput({ ...input, [name]: value });
-    }
-
-    setNewPhoto(
-      value ? { ...newPhoto, [name]: value.name } : { ...newPhoto, [name]: "", }
-    );
+    setInput({...input, [name]: value});
   };
 
   const submitForm = (event) => {
     event.preventDefault();
   };
 
-  const employees = useSelector((state) => state.EmployeesReducer.employees);
+  const charges = useSelector((state) => state.ChargesReducer.charges);
 
   const getBadge = (status) => {
     switch (status) {
-      case "Ativo/a":
+      case "Enviado":
         return "bg-blue";
-      case "Inativo/a":
-        return "bg-secondary";
-      case "Banido/a":
+      case "Atrasado":
+        return "bg-yellow";
+      case "Suspenso":
         return "bg-red";
+      case "Pago":
+        return "bg-green";
       default:
         return "primary";
     }
@@ -118,42 +77,48 @@ const Colaboradores = () => {
 
   const CardData = [
     {
-      title: "Ativos",
-      progress: employees.filter((employees) => employees.status === "Ativo/a")
+      title: "Enviados",
+      progress: charges.filter((contract) => contract.status === "Enviado")
         .length,
-      max: employees.length,
-      icon: "fas fa-user-check",
+      max: charges.length,
+      icon: "fas fa-stopwatch",
       color: "blue",
     },
     {
-      title: "Inativos",
-      progress: employees.filter(
-        (employees) => employees.status === "Inativo/a"
-      ).length,
-      max: employees.length,
-      icon: "fas fa-user-times",
-      color: "gray",
+      title: "Expirados",
+      progress: charges.filter((contract) => contract.status === "Expirado")
+        .length,
+      max: charges.length,
+      icon: "fas fa-exclamation-triangle",
+      color: "yellow",
     },
     {
-      title: "Banidos",
-      progress: employees.filter((employees) => employees.status === "Banido/a")
+      title: "Declinados",
+      progress: charges.filter((contract) => contract.status === "Declinado")
         .length,
-      max: employees.length,
-      icon: "fas fa-user-alt-slash",
+      max: charges.length,
+      icon: "fas fa-times",
       color: "red",
+    },
+    {
+      title: "Aceitos",
+      progress: charges.filter((contract) => contract.status === "Aceito")
+        .length,
+      max: charges.length,
+      icon: "fas fa-check",
+      color: "green",
     },
   ];
 
   return (
     <>
       <Header children={<ProgressCard CardData={CardData} />} />
-
       <Container className="mt--7" fluid>
         <Row className="mt-5">
           <div className="col">
             <Card className="bg-default shadow">
               <CardHeaderStyled>
-                <h3 className="text-white mb-0">Lista de Colaboradores</h3>
+                <h3 className="text-white mb-0">Lista de Cobranças</h3>
                 <div className="d-flex align-items-center">
                   <InputStyled type="text" placeholder="Pesquisar..." />
                   <Button className="bg-transparent border-0">
@@ -161,7 +126,10 @@ const Colaboradores = () => {
                   </Button>
                 </div>
                 <div>
-                  <Button color="primary" onClick={() => setOpenAddContract(!open)}>
+                  <Button
+                    color="primary"
+                    onClick={() => setOpenAddCharge(!openAddCharge)}
+                  >
                     Adicionar
                   </Button>
                 </div>
@@ -172,31 +140,31 @@ const Colaboradores = () => {
               >
                 <thead className="thead-dark">
                   <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Nascimento</th>
-                    <th scope="col">Cargo</th>
-                    <th scope="col">Endereço</th>
+                    <th scope="col">CPF ou CNPJ</th>
+                    <th scope="col">Data de Cobrança</th>
+                    <th scope="col">Data de Vencimento</th>
+                    <th scope="col">Valor</th>
                     <th scope="col">Status</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {employees.map((employees, index) => (
+                  {charges.map((charge, index) => (
                     <Tr
                       key={index}
                       onClick={() => {
                         setOpen(!open);
-                        setEmployee(employees);
+                        setCharge(charge);
                       }}
                     >
-                      <td>{employees.name}</td>
-                      <td>{employees.dateBirth}</td>
-                      <td>{employees.position}</td>
-                      <td>{employees.address}</td>
+                      <td>{charge.cpf_cnpj}</td>
+                      <td>{charge.value}</td>
+                      <td>{charge.date_of_charge}</td>
+                      <td>{charge.due_date}</td>
                       <td>
                         <Badge color="" className="badge-dot">
-                          <i className={getBadge(employees.status)} />
-                          {employees.status}
+                          <i className={getBadge(charge.status)} />
+                          {charge.status}
                         </Badge>
                       </td>
                       <td className="text-right">
@@ -219,25 +187,19 @@ const Colaboradores = () => {
                               href="#pablo"
                               onClick={(e) => e.preventDefault()}
                             >
-                              Ativar
+                              Action
                             </DropdownItem>
                             <DropdownItem
                               href="#pablo"
                               onClick={(e) => e.preventDefault()}
                             >
-                              Desativar
+                              Another action
                             </DropdownItem>
                             <DropdownItem
                               href="#pablo"
                               onClick={(e) => e.preventDefault()}
                             >
-                              Banir
-                            </DropdownItem>
-                            <DropdownItem
-                              href="#pablo"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              Excluir Definitivamente
+                              Something else here
                             </DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown>
@@ -314,47 +276,9 @@ const Colaboradores = () => {
             setOpen(!open);
           }}
         >
-          Colaborador
+          {charge.title}
         </ModalHeader>
-        <ModalBody>
-          <Nav tabs className="mb-3">
-            <NavItem>
-              <NavLink
-                href="#"
-                onClick={() => setTab("Dados")}
-                active={tab === "Dados"}
-              >
-                Dados
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                href="#"
-                onClick={() => {
-                  setInput(employee);
-                  setTab("Editar");
-                  setNewPhoto(!newPhoto);
-                }}
-                active={tab === "Editar"}
-              >
-                Editar
-              </NavLink>
-            </NavItem>
-          </Nav>
-          {tab === "Dados" ? (
-            <Colaborador employee={employee} />
-          ) : (
-            <Form onSubmit={submitForm}>
-              <EditarColaborador
-                title="Editar Dados"
-                input={input}
-                handleChangeInput={handleChangeInput}
-                handleSelectFile={handleSelectFile}
-                newPhoto={newPhoto}
-              />
-            </Form>
-          )}
-        </ModalBody>
+        <ModalBody></ModalBody>
         <ModalFooter className="d-flex justify-content-end">
           <Button color="secondary" onClick={() => setOpen(!open)}>
             Sair
@@ -362,38 +286,107 @@ const Colaboradores = () => {
         </ModalFooter>
       </Modal>
       <Modal
-        isOpen={openAddContract}
-        toggle={() => {
-          setOpenAddContract(!openAddContract);
-        }}
+        isOpen={openAddCharge}
+        toggle={() => setOpenAddCharge(!openAddCharge)}
         size="lg"
       >
-        <ModalHeader
-          toggle={() => {
-            setOpenAddContract(!openAddContract);
-          }}
-        >
-          Adicionar Novo Contrato
+        <ModalHeader toggle={() => setOpenAddCharge(!openAddCharge)}>
+          Adicionar Nova Cobrança
         </ModalHeader>
         <Form onSubmit={submitForm}>
           <ModalBody>
-            <EditarColaborador
-              title="Adicionar Colaborador"
-              input={input}
-              handleChangeInput={handleChangeInput}
-              handleSelectFile={handleSelectFile}
-              newPhoto={newPhoto}
-            />
+            <Row>
+              <Col lg="8">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="name">
+                    Nome Completo do Devedor
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    id="name"
+                    name="name"
+                    onChange={handleChangeInput}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="4">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="cpf_cnpj">
+                    CNPJ ou CPF do Devedor
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    name="cpf_cnpj"
+                    id="cpf_cnpj"
+                    onChange={handleChangeInput}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="4">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="value">
+                    Valor em R$
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    name="value"
+                    id="value"
+                    onChange={handleChangeInput}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="4">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="date_of_charge"
+                  >
+                    Date de Cobrança
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    type="date"
+                    name="date_of_charge"
+                    id="date_of_charge"
+                    onChange={handleChangeInput}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="4">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="due_date">
+                    Data de Vencimento
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    type="date"
+                    name="due_date"
+                    id="due_date"
+                    onChange={handleChangeInput}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="12">
+                <label className="form-control-label" htmlFor="description">
+                  Descrição
+                </label>
+                <Input
+                  className="form-control-alternative"
+                  rows="6"
+                  type="textarea"
+                  id="description"
+                  name="description"
+                />
+              </Col>
+            </Row>
           </ModalBody>
           <ModalFooter>
-            <Button type="button" color="primary">
-              Adicionar
+            <Button color="primary" type="submit">
+              Salvar
             </Button>
             <Button
               color="secondary"
-              onClick={() => {
-                setOpenAddContract(!openAddContract);
-              }}
+              onClick={() => setOpenAddCharge(!openAddCharge)}
             >
               Cancelar
             </Button>
@@ -404,4 +397,4 @@ const Colaboradores = () => {
   );
 };
 
-export default Colaboradores;
+export default Orcamentos;

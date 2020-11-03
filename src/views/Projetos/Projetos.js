@@ -27,12 +27,12 @@ import {
   Col,
 } from "reactstrap";
 
-import Header from "components/Headers/Header.js";
+import Header from "../../components/Headers/Header";
 
 import { newProjects, setProject } from "../../redux/actions/Projetos";
 
 import ProjetosData from "./ProjetosData";
-import ProgressCard from "components/ProgressCard/ProgressCard";
+import ProgressCard from "../../components/ProgressCard/ProgressCard";
 import { Tr } from "./Styles";
 import { InputStyled } from "./Styles";
 import { CardHeaderStyled } from "./Styles";
@@ -47,7 +47,6 @@ const Projetos = () => {
   }, [dispatch]);
 
   const [open, setOpen] = useState(false);
-  const [projectInfo, setProjectInfo] = useState({});
   const [input, setInput] = useState({
     description: "",
   });

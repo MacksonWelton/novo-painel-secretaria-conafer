@@ -1,21 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-/*eslint-disable*/
 import React from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 // nodejs library to set properties for components
@@ -23,17 +5,11 @@ import { PropTypes } from "prop-types";
 
 // reactstrap components
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Collapse,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  FormGroup,
   Form,
   Input,
   InputGroupAddon,
@@ -45,21 +21,18 @@ import {
   NavItem,
   NavLink,
   Nav,
-  Progress,
-  Table,
   Container,
   Row,
   Col,
   Dropdown,
 } from "reactstrap";
 
-var ps;
-
 class Sidebar extends React.Component {
   state = {
     collapseOpen: false,
     dropdownOpen: false,
   };
+
   constructor(props) {
     super(props);
     this.activeRoute.bind(this);
@@ -81,8 +54,10 @@ class Sidebar extends React.Component {
     });
   };
 
-  toggle = () => {
-    this.setState({ dropdownOpen: !this.state.dropdownOpen });
+  toggle = (key) => {
+    this.setState({
+      dropdownOpen: this.state.dropdownOpen === key ? false : key,
+    });
   };
 
   // creates the links that appear in the left menu / Sidebar
@@ -104,7 +79,12 @@ class Sidebar extends React.Component {
         );
       } else if (prop.dropdown) {
         return (
-          <Dropdown nav isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+          <Dropdown
+            nav
+            isOpen={this.state.dropdownOpen === key}
+            toggle={() => this.toggle(key)}
+            key={key}
+          >
             <DropdownToggle nav caret>
               <i className={prop.icon} />
               {prop.title}
@@ -112,7 +92,7 @@ class Sidebar extends React.Component {
             <DropdownMenu>
               {prop.items.map((item, key) => {
                 return (
-                  <NavItem key={key}>
+                  <div key={key}>
                     <NavLink
                       to={item.layout + item.path}
                       tag={NavLinkRRD}
@@ -122,7 +102,7 @@ class Sidebar extends React.Component {
                       <i className={item.icon} />
                       {item.name}
                     </NavLink>
-                  </NavItem>
+                  </div>
                 );
               })}
             </DropdownMenu>
@@ -135,7 +115,7 @@ class Sidebar extends React.Component {
   };
 
   render() {
-    const { bgColor, routes, logo } = this.props;
+    const { routes, logo } = this.props;
     let navbarBrandProps;
     if (logo && logo.innerLink) {
       navbarBrandProps = {

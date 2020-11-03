@@ -18,98 +18,58 @@ import {
   Row,
   Modal,
   Button,
+  Input,
+  Form,
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Nav,
-  NavItem,
-  NavLink,
-  Form,
 } from "reactstrap";
 
-import Header from "../../components/Headers/Header";
+import Header from "components/Headers/Header.js";
 
-import ColaboradoresData from "./ColaboradoresData";
-import { CardHeaderStyled, InputStyled, Tr } from "./Styles";
-import ProgressCard from "../../components/ProgressCard/ProgressCard";
-import { newEmployees } from "redux/actions/Colaboradores";
-import Colaborador from "components/Colaborador/Colaborador";
-import EditarColaborador from "components/Colaborador/EditarColaborador";
+import { newSupports, newAnswers } from "../../redux/actions/Suporte";
 
-import user from "../../assets/img/theme/user.png";
+import SuporteData from "./SuporteData";
+import { Tr } from "./styles";
+import ProgressCard from "components/ProgressCard/ProgressCard";
+import { InputStyled } from "views/Contratos/styles";
+import { CardHeaderStyled } from "views/Contratos/styles";
 
-const Colaboradores = () => {
+const Suporte = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(newEmployees(ColaboradoresData));
+    dispatch(newSupports(SuporteData));
   }, [dispatch]);
 
   const [open, setOpen] = useState(false);
-  const [employee, setEmployee] = useState({});
-  const [tab, setTab] = useState("Dados");
+  const [support, setSupport] = useState({});
   const [input, setInput] = useState({
-    photo: user,
-    name: "",
-    dateBirth: "",
-    sex: "",
-    education: "",
-    position: "",
-    salary: "",
-    cpf: "",
-    rg: "",
-    district: "",
-    admission_date: "",
-    emission_date: "",
-    organ_issuing: "",
-    voter_title: "",
-    electoral_zone: "",
-    section: "",
-    email: "",
-    citizenship: "",
-    address: "",
-    cep: "",
-    city: "",
-    state: undefined,
-    marital_status: undefined,
+    ticket: "",
+    secretary: "",
+    file: "",
+    files: [],
   });
-
-  const [newPhoto, setNewPhoto] = useState(true);
-  const [openAddContract, setOpenAddContract] = useState(false);
 
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
     setInput({ ...input, [name]: value });
   };
 
-  const handleSelectFile = (event) => {
-    const name = event.target.name;
-    const value = event.target.files[0];
-
-    if (value === undefined) {
-      setInput({ ...input, [name]: user });
-    } else {
-      setInput({ ...input, [name]: value });
-    }
-
-    setNewPhoto(
-      value ? { ...newPhoto, [name]: value.name } : { ...newPhoto, [name]: "", }
-    );
-  };
-
   const submitForm = (event) => {
     event.preventDefault();
+    dispatch(newAnswers(input));
   };
 
-  const employees = useSelector((state) => state.EmployeesReducer.employees);
+  const supports = useSelector((state) => state.SupportsReducer.supports);
 
   const getBadge = (status) => {
     switch (status) {
-      case "Ativo/a":
-        return "bg-blue";
-      case "Inativo/a":
-        return "bg-secondary";
-      case "Banido/a":
+      case "Concluído":
+        return "bg-green";
+      case "Aberto":
+        return "bg-yellow";
+      case "Fechado":
         return "bg-red";
       default:
         return "primary";
@@ -118,51 +78,48 @@ const Colaboradores = () => {
 
   const CardData = [
     {
-      title: "Ativos",
-      progress: employees.filter((employees) => employees.status === "Ativo/a")
-        .length,
-      max: employees.length,
-      icon: "fas fa-user-check",
+      title: "Abertos",
+      progress: 30,
+      max: 40,
+      icon: "fas fa-headset",
+      color: "yellow",
+    },
+    {
+      title: "Respondidos",
+      progress: 0,
+      max: 50,
+      icon: "fas fa-question",
       color: "blue",
     },
     {
-      title: "Inativos",
-      progress: employees.filter(
-        (employees) => employees.status === "Inativo/a"
-      ).length,
-      max: employees.length,
-      icon: "fas fa-user-times",
-      color: "gray",
+      title: "Encerrados",
+      progress: 35,
+      max: 50,
+      icon: "fas fa-times",
+      color: "red",
     },
     {
-      title: "Banidos",
-      progress: employees.filter((employees) => employees.status === "Banido/a")
-        .length,
-      max: employees.length,
-      icon: "fas fa-user-alt-slash",
-      color: "red",
+      title: "Concluídos",
+      progress: 35,
+      max: 40,
+      icon: "fas fa-check",
+      color: "green",
     },
   ];
 
   return (
     <>
       <Header children={<ProgressCard CardData={CardData} />} />
-
       <Container className="mt--7" fluid>
         <Row className="mt-5">
           <div className="col">
             <Card className="bg-default shadow">
               <CardHeaderStyled>
-                <h3 className="text-white mb-0">Lista de Colaboradores</h3>
+                <h3 className="text-white mb-0">Lista de Chamados</h3>
                 <div className="d-flex align-items-center">
                   <InputStyled type="text" placeholder="Pesquisar..." />
                   <Button className="bg-transparent border-0">
                     <i className="fas fa-search text-white display-4"></i>
-                  </Button>
-                </div>
-                <div>
-                  <Button color="primary" onClick={() => setOpenAddContract(!open)}>
-                    Adicionar
                   </Button>
                 </div>
               </CardHeaderStyled>
@@ -172,33 +129,31 @@ const Colaboradores = () => {
               >
                 <thead className="thead-dark">
                   <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Nascimento</th>
-                    <th scope="col">Cargo</th>
-                    <th scope="col">Endereço</th>
+                    <th scope="col">Chamado</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Criado em</th>
+                    <th scope="col">última Resposta</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {employees.map((employees, index) => (
+                  {supports.map((support, index) => (
                     <Tr
                       key={index}
                       onClick={() => {
                         setOpen(!open);
-                        setEmployee(employees);
+                        setSupport(support);
                       }}
                     >
-                      <td>{employees.name}</td>
-                      <td>{employees.dateBirth}</td>
-                      <td>{employees.position}</td>
-                      <td>{employees.address}</td>
+                      <td>{support.id}</td>
                       <td>
                         <Badge color="" className="badge-dot">
-                          <i className={getBadge(employees.status)} />
-                          {employees.status}
+                          <i className={getBadge(support.status)} />
+                          {support.status}
                         </Badge>
                       </td>
+                      <td>{support.createdIn}</td>
+                      <td>{support.lastAnswer}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
@@ -219,25 +174,19 @@ const Colaboradores = () => {
                               href="#pablo"
                               onClick={(e) => e.preventDefault()}
                             >
-                              Ativar
+                              Action
                             </DropdownItem>
                             <DropdownItem
                               href="#pablo"
                               onClick={(e) => e.preventDefault()}
                             >
-                              Desativar
+                              Another action
                             </DropdownItem>
                             <DropdownItem
                               href="#pablo"
                               onClick={(e) => e.preventDefault()}
                             >
-                              Banir
-                            </DropdownItem>
-                            <DropdownItem
-                              href="#pablo"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              Excluir Definitivamente
+                              Something else here
                             </DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown>
@@ -314,46 +263,38 @@ const Colaboradores = () => {
             setOpen(!open);
           }}
         >
-          Colaborador
+          {support.name}
         </ModalHeader>
         <ModalBody>
-          <Nav tabs className="mb-3">
-            <NavItem>
-              <NavLink
-                href="#"
-                onClick={() => setTab("Dados")}
-                active={tab === "Dados"}
-              >
-                Dados
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                href="#"
-                onClick={() => {
-                  setInput(employee);
-                  setTab("Editar");
-                  setNewPhoto(!newPhoto);
-                }}
-                active={tab === "Editar"}
-              >
-                Editar
-              </NavLink>
-            </NavItem>
-          </Nav>
-          {tab === "Dados" ? (
-            <Colaborador employee={employee} />
-          ) : (
+          <>
+            <p className="mb-0">{support.description}</p>
+            <p className="h6 mb-3">Criado em: {support.createdIn}</p>
+          </>
+          <>
+            {support.answers &&
+              support.answers.map((answer, index) => (
+                <div key={index} className="p-3 rounded bg-default text-white">
+                  <p>
+                    <b>{answer.createdBy}</b>
+                  </p>
+                  <p>{answer.answer}</p>
+                  <p className="h6 mb-3">Criado em: {answer.createdIn}</p>
+                </div>
+              ))}
             <Form onSubmit={submitForm}>
-              <EditarColaborador
-                title="Editar Dados"
-                input={input}
-                handleChangeInput={handleChangeInput}
-                handleSelectFile={handleSelectFile}
-                newPhoto={newPhoto}
+              <Input
+                className="mb-3 mt-5"
+                name="answer"
+                placeholder="Digite uma nova resposta..."
+                onChange={handleChangeInput}
+                rows="4"
+                type="textarea"
               />
+              <div className="d-flex justify-content-end">
+                <Button color="primary">Comentar</Button>
+              </div>
             </Form>
-          )}
+          </>
         </ModalBody>
         <ModalFooter className="d-flex justify-content-end">
           <Button color="secondary" onClick={() => setOpen(!open)}>
@@ -361,47 +302,8 @@ const Colaboradores = () => {
           </Button>
         </ModalFooter>
       </Modal>
-      <Modal
-        isOpen={openAddContract}
-        toggle={() => {
-          setOpenAddContract(!openAddContract);
-        }}
-        size="lg"
-      >
-        <ModalHeader
-          toggle={() => {
-            setOpenAddContract(!openAddContract);
-          }}
-        >
-          Adicionar Novo Contrato
-        </ModalHeader>
-        <Form onSubmit={submitForm}>
-          <ModalBody>
-            <EditarColaborador
-              title="Adicionar Colaborador"
-              input={input}
-              handleChangeInput={handleChangeInput}
-              handleSelectFile={handleSelectFile}
-              newPhoto={newPhoto}
-            />
-          </ModalBody>
-          <ModalFooter>
-            <Button type="button" color="primary">
-              Adicionar
-            </Button>
-            <Button
-              color="secondary"
-              onClick={() => {
-                setOpenAddContract(!openAddContract);
-              }}
-            >
-              Cancelar
-            </Button>
-          </ModalFooter>
-        </Form>
-      </Modal>
     </>
   );
 };
 
-export default Colaboradores;
+export default Suporte;
