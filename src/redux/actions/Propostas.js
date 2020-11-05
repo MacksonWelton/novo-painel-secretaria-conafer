@@ -46,7 +46,7 @@ export const deleteProposals  = (data) => (dispatch) => {
 }
 
 const removeProposals  = (proposals) => ({
-  type: "DELETE_EMPLOYEES",
+  type: "DELETE_PROPOSALS",
   payload: {
     proposals
   }

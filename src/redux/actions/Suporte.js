@@ -38,7 +38,7 @@ export const deleteSupports  = (data) => (dispatch) => {
 }
 
 const removeSupports  = (supports) => ({
-  type: "DELETE_EMPLOYEES",
+  type: "DELETE_SUPPORTS",
   payload: {
     supports
   }
