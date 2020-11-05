@@ -94,6 +94,14 @@ const Contratos = () => {
     }
   };
 
+  const handleDownloadsContracts = () => {
+    dispatch(downloadContracts(checkbox));
+  };
+
+  const handleDeleteContracts = () => {
+    dispatch(deleteContracts(checkbox));
+  };
+
   const handleChangeInputAddComment = (event, id) => {
     setAddComment({ ...addComment, id: id, value: event.target.value });
   };
@@ -103,13 +111,7 @@ const Contratos = () => {
     dispatch(newComment(addComment));
   };
 
-  const handleDownloadsContracts = () => {
-    dispatch(downloadContracts(checkbox));
-  };
 
-  const handleDeleteContracts = () => {
-    dispatch(deleteContracts(checkbox));
-  };
 
   const getBadge = (status) => {
     switch (status) {

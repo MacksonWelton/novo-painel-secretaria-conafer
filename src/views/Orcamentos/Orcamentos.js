@@ -54,10 +54,6 @@ const Orcamentos = () => {
   const [input, setInput] = useState();
   const [checkbox, setCheckbox] = useState([]);
 
-  const handleChangeInput = (event) => {
-    setInput(event.target.value);
-  };
-
   const handleChangeCheckbox = (event) => {
     const { value, checked } = event.target;
     if (checked) {
@@ -81,17 +77,21 @@ const Orcamentos = () => {
     }
   };
 
-  const submitForm = (event) => {
-    event.preventDefault();
-    dispatch(newComment(input));
-  };
-
   const handleDownloadsBudgets = () => {
     dispatch(downloadBudgets(checkbox));
   };
 
   const handleDeleteBudgets = () => {
     dispatch(deleteBudgets(checkbox));
+  };
+
+  const handleChangeInput = (event) => {
+    setInput(event.target.value);
+  };
+
+  const submitForm = (event) => {
+    event.preventDefault();
+    dispatch(newComment(input));
   };
 
   const getBadge = (status) => {

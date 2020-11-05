@@ -54,11 +54,6 @@ const Suporte = () => {
   });
   const [checkbox, setCheckbox] = useState([]);
 
-  const handleChangeInput = (event) => {
-    const { name, value } = event.target;
-    setInput({ ...input, [name]: value });
-  };
-
   const handleChangeCheckbox = (event) => {
     const { value, checked } = event.target;
     if (checked) {
@@ -82,17 +77,23 @@ const Suporte = () => {
     }
   };
 
-  const submitForm = (event) => {
-    event.preventDefault();
-    dispatch(newAnswers(input));
-  };
-
   const handleDownloadsSupports = () => {
     dispatch(downloadSupports(checkbox));
   };
 
   const handleDeleteSupports = () => {
     dispatch(deleteSupports(checkbox));
+  };
+
+  const handleChangeInput = (event) => {
+    const { name, value } = event.target;
+    setInput({ ...input, [name]: value });
+  };
+
+
+  const submitForm = (event) => {
+    event.preventDefault();
+    dispatch(newAnswers(input));
   };
 
   const getBadge = (status) => {

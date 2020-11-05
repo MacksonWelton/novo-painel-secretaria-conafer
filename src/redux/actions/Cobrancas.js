@@ -1,8 +1,13 @@
 export const newCharges = (charges) => (dispatch) => {
-  dispatch(setCharges(charges));
+  try {
+
+    dispatch(setCharges(charges));
+  } catch (err) {
+    console.error(err.message);
+  }
 };
 
-export const setCharges = (charges) => ({
+const setCharges = (charges) => ({
   type: "SET_CHARGES",
   payload: {
     charges
@@ -27,7 +32,7 @@ export const deleteCharges = (data) => (dispatch) => {
 }
 
 const removeCharges = (charges) => ({
-  type: "DELETE_EMPLOYEES",
+  type: "DELETE_CHARGES",
   payload: {
     charges
   }

@@ -76,6 +76,14 @@ const Propostas = () => {
     }
   };
 
+  const handleDownloadsProposals = () => {
+    dispatch(downloadProposals(checkbox));
+  };
+
+  const handleDeleteProposals = () => {
+    dispatch(deleteProposals(checkbox));
+  };
+
   const handleChangeInput = (event) => {
     setInput(event.target.value);
   };
@@ -83,14 +91,6 @@ const Propostas = () => {
   const submitForm = (event) => {
     event.preventDefault();
     dispatch(newComment(input));
-  };
-
-  const handleDownloadsProposals = () => {
-    dispatch(downloadProposals(checkbox));
-  };
-
-  const handleDeleteProposals = () => {
-    dispatch(deleteProposals(checkbox));
   };
 
   const getBadge = (status) => {
