@@ -1,6 +1,6 @@
 const CobrancasData = [
   {
-    id: 0,
+    id: "0",
     cpf_cnpj: "#01",
     title: "Cobrança",
     date_of_charge: "20/01/2020",
@@ -10,14 +10,14 @@ const CobrancasData = [
     descripition: "Compra de novo trator.",
     comentatio: [
       {
-        id: 0,
+        id: "0",
         comentario: "Do que se trata o termo 'afiliação'?",
         comentarioPai: null,
         feitopor: "Por Mim",
         feitoem: "18/08/2020",
       },
       {
-        id: 1,
+        id: "1",
         comentario:
           "O termo afiliado é o nome que se dá ao indivíduo afiliado a conafer",
         comentarioPai: 0,
@@ -27,7 +27,7 @@ const CobrancasData = [
     ],
   },
   {
-    id: 0,
+    id: "1",
     cpf_cnpj: "#02",
     title: "Cobrança",
     date_of_charge: "20/01/2020",
@@ -37,14 +37,14 @@ const CobrancasData = [
     descripition: "Compra de novo trator.",
     comentatio: [
       {
-        id: 0,
+        id: "0",
         comentario: "Do que se trata o termo 'afiliação'?",
         comentarioPai: null,
         feitopor: "Por Mim",
         feitoem: "18/08/2020",
       },
       {
-        id: 1,
+        id: "1",
         comentario:
           "O termo afiliado é o nome que se dá ao indivíduo afiliado a conafer",
         comentarioPai: 0,
@@ -54,7 +54,7 @@ const CobrancasData = [
     ],
   },
   {
-    id: 0,
+    id: "2",
     cpf_cnpj: "#02",
     title: "Cobrança",
     date_of_charge: "01/02/2020",
@@ -64,14 +64,14 @@ const CobrancasData = [
     descripition: "Compra de caminhão",
     comentatio: [
       {
-        id: 0,
+        id: "0",
         comentario: "E esse contrato aqui? Não entendi seu propósito",
         comentarioPai: null,
         feitopor: "Por Mim",
         feitoem: "18/08/2020",
       },
       {
-        id: 1,
+        id: "1",
         comentario:
           "O termo afiliado é o nome que se dá ao indivíduo afiliado a conafer",
         comentarioPai: 0,
@@ -81,7 +81,7 @@ const CobrancasData = [
     ],
   },
   {
-    id: 0,
+    id: "3",
     cpf_cnpj: "#03",
     title: "Cobrança",
     date_of_charge: "20/01/2020",
@@ -91,14 +91,14 @@ const CobrancasData = [
     descripition: "Compra de novo trator.",
     comentatio: [
       {
-        id: 0,
+        id: "0",
         comentario: "Do que se trata o termo 'afiliação'?",
         comentarioPai: null,
         feitopor: "Por Mim",
         feitoem: "18/08/2020",
       },
       {
-        id: 1,
+        id: "1",
         comentario:
           "O termo afiliado é o nome que se dá ao indivíduo afiliado a conafer",
         comentarioPai: 0,
@@ -108,7 +108,7 @@ const CobrancasData = [
     ],
   },
   {
-    id: 0,
+    id: "4",
     cpf_cnpj: "#04",
     title: "Cobrança",
     date_of_charge: "20/01/2020",
@@ -118,14 +118,14 @@ const CobrancasData = [
     descripition: "Compra de novo trator.",
     comentatio: [
       {
-        id: 0,
+        id: "0",
         comentario: "Do que se trata o termo 'afiliação'?",
         comentarioPai: null,
         feitopor: "Por Mim",
         feitoem: "18/08/2020",
       },
       {
-        id: 1,
+        id: "1",
         comentario:
           "O termo afiliado é o nome que se dá ao indivíduo afiliado a conafer",
         comentarioPai: 0,

@@ -29,7 +29,7 @@ import {
 
 import Header from "../../components/Headers/Header";
 
-import { newProjects, setProject } from "../../redux/actions/Projetos";
+import { deleteProjects, downloadProjects, newProjects, setProject } from "../../redux/actions/Projetos";
 
 import ProjetosData from "./ProjetosData";
 import ProgressCard from "../../components/ProgressCard/ProgressCard";
@@ -37,10 +37,12 @@ import { Tr } from "./Styles";
 import { InputStyled } from "./Styles";
 import { CardHeaderStyled } from "./Styles";
 import { useHistory } from "react-router-dom";
+import BotoesDeAcao from "components/BotoesDeAcao/BotoesDeAcao";
 
 const Projetos = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const projects = useSelector((state) => state.ProjectsReducer.projects);
 
   useEffect(() => {
     dispatch(newProjects(ProjetosData));
@@ -50,13 +52,43 @@ const Projetos = () => {
   const [input, setInput] = useState({
     description: "",
   });
+  const [checkbox, setCheckbox] = useState([]);
 
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
-    setInput({...input, [name]: value});
+    setInput({ ...input, [name]: value });
   };
 
-  const projects = useSelector((state) => state.ProjectsReducer.projects);
+  const handleChangeCheckbox = (event) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setCheckbox([...checkbox, { id: value, checked }]);
+    } else {
+      setCheckbox(checkbox.filter((check) => check.id !== value));
+    }
+  };
+
+  const handleSelectAllCheckbox = (event) => {
+    const checked = event.target.checked;
+
+    if (checked) {
+      setCheckbox(
+        projects.map((project) => {
+          return { id: project.id, checked: true };
+        })
+      );
+    } else {
+      setCheckbox([]);
+    }
+  };
+
+  const handleDownloadsBudgets = () => {
+    dispatch(downloadProjects(checkbox));
+  };
+
+  const handleDeleteBudgets = () => {
+    dispatch(deleteProjects(checkbox));
+  };
 
   const getBadge = (status) => {
     switch (status) {
@@ -140,12 +172,31 @@ const Projetos = () => {
                 responsive
               >
                 <thead className="thead-dark">
+                {checkbox.length > 0 && (
+                    <tr>
+                      <th></th>
+                      <th>
+                        <BotoesDeAcao 
+                          handleDownloadsItems={handleDownloadsBudgets}
+                          handleDeleteItems={handleDeleteBudgets}
+                        />
+                      </th>
+                    </tr>
+                  )}
                   <tr>
+                    <th scope="col">
+                      <div className="d-flex justify-content-end align-items-center">
+                        <Input
+                          type="checkbox"
+                          onChange={handleSelectAllCheckbox}
+                        />
+                      </div>
+                    </th>
                     <th scope="col">Projeto</th>
                     <th scope="col">Descrição</th>
-                    <th scope="col">Status</th>
                     <th scope="col">Data de Início</th>
                     <th scope="col">Data de Entrega</th>
+                    <th scope="col">Status</th>
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -158,16 +209,30 @@ const Projetos = () => {
                         history.push("/admin/projeto");
                       }}
                     >
+                      <td
+                        className="d-flex justify-content-end"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Input
+                          checked={
+                            checkbox.filter((check) => check.id === project.id)
+                              .length
+                          }
+                          value={project.id}
+                          type="checkbox"
+                          onChange={handleChangeCheckbox}
+                        />
+                      </td>
                       <td>{project.name}</td>
                       <td>{project.description}</td>
+                      <td>{project.start_date}</td>
+                      <td>{project.delivery_date}</td>
                       <td>
                         <Badge color="" className="badge-dot">
                           <i className={getBadge(project.status)} />
                           {project.status}
                         </Badge>
                       </td>
-                      <td>{project.start_date}</td>
-                      <td>{project.delivery_date}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle

@@ -26,3 +26,27 @@ export const setBudget = (budget) => ({
     budget,
   },
 });
+
+export const downloadBudgets  = (data) => () => {
+  try {
+    console.log(data);
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+
+export const deleteBudgets  = (data) => (dispatch) => {
+  try {
+    console.log(data);
+    dispatch(removeBudgets )
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+
+const removeBudgets  = (budgets) => ({
+  type: "DELETE_EMPLOYEES",
+  payload: {
+    budgets
+  }
+})

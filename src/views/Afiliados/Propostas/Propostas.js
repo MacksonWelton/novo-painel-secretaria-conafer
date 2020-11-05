@@ -25,7 +25,12 @@ import {
   ModalFooter,
 } from "reactstrap";
 
-import { newProposals, newComment } from "../../../redux/actions/Propostas";
+import {
+  newProposals,
+  newComment,
+  downloadProposals,
+  deleteProposals,
+} from "../../../redux/actions/Propostas";
 
 import PropostasData from "./PropostasData";
 import { Tr } from "./styles";
@@ -33,9 +38,11 @@ import ProgressCard from "components/ProgressCard/ProgressCard";
 import { InputStyled } from "views/Contratos/styles";
 import { CardHeaderStyled } from "views/Contratos/styles";
 import Header from "components/Headers/Header";
+import BotoesDeAcao from "components/BotoesDeAcao/BotoesDeAcao";
 
 const Propostas = () => {
   const dispatch = useDispatch();
+  const proposals = useSelector((state) => state.ProposalReducer.proposals);
 
   useEffect(() => {
     dispatch(newProposals(PropostasData));
@@ -44,6 +51,30 @@ const Propostas = () => {
   const [open, setOpen] = useState(false);
   const [proposal, setProposal] = useState({});
   const [input, setInput] = useState();
+  const [checkbox, setCheckbox] = useState([]);
+
+  const handleChangeCheckbox = (event) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setCheckbox([...checkbox, { id: value, checked }]);
+    } else {
+      setCheckbox(checkbox.filter((check) => check.id !== value));
+    }
+  };
+
+  const handleSelectAllCheckbox = (event) => {
+    const checked = event.target.checked;
+
+    if (checked) {
+      setCheckbox(
+        proposals.map((proposal) => {
+          return { id: proposal.id, checked: true };
+        })
+      );
+    } else {
+      setCheckbox([]);
+    }
+  };
 
   const handleChangeInput = (event) => {
     setInput(event.target.value);
@@ -54,7 +85,13 @@ const Propostas = () => {
     dispatch(newComment(input));
   };
 
-  const proposals = useSelector((state) => state.ProposalReducer.proposals);
+  const handleDownloadsProposals = () => {
+    dispatch(downloadProposals(checkbox));
+  };
+
+  const handleDeleteProposals = () => {
+    dispatch(deleteProposals(checkbox));
+  };
 
   const getBadge = (status) => {
     switch (status) {
@@ -130,12 +167,31 @@ const Propostas = () => {
                 responsive
               >
                 <thead className="thead-dark">
+                  {checkbox.length > 0 && (
+                    <tr>
+                      <th></th>
+                      <th>
+                        <BotoesDeAcao
+                          handleDownloadsItems={handleDownloadsProposals}
+                          handleDeleteItems={handleDeleteProposals}
+                        />
+                      </th>
+                    </tr>
+                  )}
                   <tr>
+                    <th scope="col">
+                      <div className="d-flex justify-content-end align-items-center">
+                        <Input
+                          type="checkbox"
+                          onChange={handleSelectAllCheckbox}
+                        />
+                      </div>
+                    </th>
                     <th scope="col">Proposta</th>
                     <th scope="col">Valor</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Data</th>
+                    <th scope="col">Data de Criação</th>
                     <th scope="col">Data de Expiração</th>
+                    <th scope="col">Status</th>
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -149,16 +205,30 @@ const Propostas = () => {
                         setProposal(proposal);
                       }}
                     >
+                      <td
+                        className="d-flex justify-content-end"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Input
+                          checked={
+                            checkbox.filter((check) => check.id === proposal.id)
+                              .length
+                          }
+                          value={proposal.id}
+                          type="checkbox"
+                          onChange={handleChangeCheckbox}
+                        />
+                      </td>
                       <td>{proposal.name}</td>
                       <td>{proposal.value}</td>
+                      <td>{proposal.createdIn}</td>
+                      <td>{proposal.expirationDate}</td>
                       <td>
                         <Badge color="" className="badge-dot">
                           <i className={getBadge(proposal.status)} />
                           {proposal.status}
                         </Badge>
                       </td>
-                      <td>{proposal.createdIn}</td>
-                      <td>{proposal.expirationDate}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
@@ -168,8 +238,8 @@ const Propostas = () => {
                             size="sm"
                             color=""
                             onClick={(e) => {
-                              e.stopPropagation()
-                              e.preventDefault()
+                              e.stopPropagation();
+                              e.preventDefault();
                             }}
                           >
                             <i className="fas fa-ellipsis-v" />

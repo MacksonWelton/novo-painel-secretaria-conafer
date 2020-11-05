@@ -25,21 +25,28 @@ import {
   NavItem,
   NavLink,
   Form,
+  Input,
 } from "reactstrap";
 
 import Header from "../../components/Headers/Header";
 
 import ColaboradoresData from "./ColaboradoresData";
-import { CardHeaderStyled, InputStyled, Tr } from "./Styles";
+import { CardHeaderStyled, InputStyled, Tr } from "./styles";
 import ProgressCard from "../../components/ProgressCard/ProgressCard";
-import { newEmployees } from "redux/actions/Colaboradores";
+import {
+  newEmployees,
+  downloadEmployees,
+  deleteEmployees,
+} from "redux/actions/Colaboradores";
 import Colaborador from "components/Colaborador/Colaborador";
 import EditarColaborador from "components/Colaborador/EditarColaborador";
 
 import user from "../../assets/img/theme/user.png";
+import BotoesDeAcao from "components/BotoesDeAcao/BotoesDeAcao";
 
 const Colaboradores = () => {
   const dispatch = useDispatch();
+  const employees = useSelector((state) => state.EmployeesReducer.employees);
 
   useEffect(() => {
     dispatch(newEmployees(ColaboradoresData));
@@ -73,13 +80,37 @@ const Colaboradores = () => {
     state: undefined,
     marital_status: undefined,
   });
-
+  const [checkbox, setCheckbox] = useState([]);
   const [newPhoto, setNewPhoto] = useState(true);
   const [openAddContract, setOpenAddContract] = useState(false);
 
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
     setInput({ ...input, [name]: value });
+  };
+
+  const handleChangeCheckbox = (event) => {
+    const { value, checked } = event.target;
+
+    if (checked) {
+      setCheckbox([...checkbox, { cpf: value, checked }]);
+    } else {
+      setCheckbox(checkbox.filter((check) => check.cpf !== value));
+    }
+  };
+
+  const handleSelectAllCheckbox = (event) => {
+    const checked = event.target.checked;
+
+    if (checked) {
+      setCheckbox(
+        employees.map((employee) => {
+          return { cpf: employee.cpf, checked: true };
+        })
+      );
+    } else {
+      setCheckbox([]);
+    }
   };
 
   const handleSelectFile = (event) => {
@@ -93,7 +124,7 @@ const Colaboradores = () => {
     }
 
     setNewPhoto(
-      value ? { ...newPhoto, [name]: value.name } : { ...newPhoto, [name]: "", }
+      value ? { ...newPhoto, [name]: value.name } : { ...newPhoto, [name]: "" }
     );
   };
 
@@ -101,7 +132,13 @@ const Colaboradores = () => {
     event.preventDefault();
   };
 
-  const employees = useSelector((state) => state.EmployeesReducer.employees);
+  const handleDownloadsEmployees = () => {
+    dispatch(downloadEmployees(checkbox));
+  };
+
+  const handleDeleteEmployees = () => {
+    dispatch(deleteEmployees(checkbox));
+  };
 
   const getBadge = (status) => {
     switch (status) {
@@ -161,7 +198,10 @@ const Colaboradores = () => {
                   </Button>
                 </div>
                 <div>
-                  <Button color="primary" onClick={() => setOpenAddContract(!open)}>
+                  <Button
+                    color="primary"
+                    onClick={() => setOpenAddContract(!open)}
+                  >
                     Adicionar
                   </Button>
                 </div>
@@ -171,7 +211,26 @@ const Colaboradores = () => {
                 responsive
               >
                 <thead className="thead-dark">
+                  {checkbox.length > 0 && (
+                    <tr>
+                      <th></th>
+                      <th>
+                        <BotoesDeAcao
+                          handleDownloadsItems={handleDownloadsEmployees}
+                          handleDeleteItems={handleDeleteEmployees}
+                        />
+                      </th>
+                    </tr>
+                  )}
                   <tr>
+                    <th scope="col">
+                      <div className="d-flex justify-content-end align-items-center">
+                        <Input
+                          type="checkbox"
+                          onChange={handleSelectAllCheckbox}
+                        />
+                      </div>
+                    </th>
                     <th scope="col">Nome</th>
                     <th scope="col">Nascimento</th>
                     <th scope="col">Cargo</th>
@@ -189,6 +248,21 @@ const Colaboradores = () => {
                         setEmployee(employees);
                       }}
                     >
+                      <td
+                        className="d-flex justify-content-end"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Input
+                          checked={
+                            checkbox.filter(
+                              (check) => check.cpf === employees.cpf
+                            ).length
+                          }
+                          value={employees.cpf}
+                          type="checkbox"
+                          onChange={handleChangeCheckbox}
+                        />
+                      </td>
                       <td>{employees.name}</td>
                       <td>{employees.dateBirth}</td>
                       <td>{employees.position}</td>

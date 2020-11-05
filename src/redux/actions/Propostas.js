@@ -27,3 +27,27 @@ export const setComment = (comment) => ({
     comment
   }
 })
+
+export const downloadProposals  = (data) => () => {
+  try {
+    console.log(data);
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+
+export const deleteProposals  = (data) => (dispatch) => {
+  try {
+    console.log(data);
+    dispatch(removeProposals )
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+
+const removeProposals  = (proposals) => ({
+  type: "DELETE_EMPLOYEES",
+  payload: {
+    proposals
+  }
+})

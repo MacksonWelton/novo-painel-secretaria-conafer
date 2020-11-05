@@ -29,14 +29,21 @@ import {
 
 import Header from "../../components/Headers/Header";
 
-import { newComment, newContracts } from "../../redux/actions/Contratos";
+import {
+  newComment,
+  newContracts,
+  downloadContracts,
+  deleteContracts,
+} from "../../redux/actions/Contratos";
 
 import ContratosData from "./ContratosData";
 import { CardHeaderStyled, InputStyled, Tr } from "./styles";
 import ProgressCard from "../../components/ProgressCard/ProgressCard";
+import BotoesDeAcao from "components/BotoesDeAcao/BotoesDeAcao";
 
 const Contratos = () => {
   const dispatch = useDispatch();
+  const contracts = useSelector((state) => state.ContractsReducer.contracts);
 
   useEffect(() => {
     dispatch(newContracts(ContratosData));
@@ -49,11 +56,11 @@ const Contratos = () => {
     value: "",
     id: "",
   });
-
   const [input, setInput] = useState({
     contract: "",
     description: "",
   });
+  const [checkbox, setCheckbox] = useState([]);
 
   const submitForm = (event) => {
     event.preventDefault();
@@ -62,6 +69,29 @@ const Contratos = () => {
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
     setInput({ ...input, [name]: value });
+  };
+
+  const handleChangeCheckbox = (event) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setCheckbox([...checkbox, { id: value, checked }]);
+    } else {
+      setCheckbox(checkbox.filter((check) => check.id !== value));
+    }
+  };
+
+  const handleSelectAllCheckbox = (event) => {
+    const checked = event.target.checked;
+
+    if (checked) {
+      setCheckbox(
+        contracts.map((contract) => {
+          return { id: contract.id, checked: true };
+        })
+      );
+    } else {
+      setCheckbox([]);
+    }
   };
 
   const handleChangeInputAddComment = (event, id) => {
@@ -73,7 +103,13 @@ const Contratos = () => {
     dispatch(newComment(addComment));
   };
 
-  const contracts = useSelector((state) => state.ContractsReducer.contracts);
+  const handleDownloadsContracts = () => {
+    dispatch(downloadContracts(checkbox));
+  };
+
+  const handleDeleteContracts = () => {
+    dispatch(deleteContracts(checkbox));
+  };
 
   const getBadge = (status) => {
     switch (status) {
@@ -146,11 +182,30 @@ const Contratos = () => {
                 responsive
               >
                 <thead className="thead-dark">
+                  {checkbox.length > 0 && (
+                    <tr>
+                      <th></th>
+                      <th>
+                        <BotoesDeAcao
+                          handleDownloadsItems={handleDownloadsContracts}
+                          handleDeleteItems={handleDeleteContracts}
+                        />
+                      </th>
+                    </tr>
+                  )}
                   <tr>
+                    <th scope="col">
+                      <div className="d-flex justify-content-end align-items-center">
+                        <Input
+                          type="checkbox"
+                          onChange={handleSelectAllCheckbox}
+                        />
+                      </div>
+                    </th>
                     <th scope="col">Contrato</th>
                     <th scope="col">Valor</th>
-                    <th scope="col">Status</th>
                     <th scope="col">Criado em</th>
+                    <th scope="col">Status</th>
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -163,15 +218,29 @@ const Contratos = () => {
                         setContract(contract);
                       }}
                     >
+                      <td
+                        className="d-flex justify-content-end"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Input
+                          checked={
+                            checkbox.filter((check) => check.id === contract.id)
+                              .length
+                          }
+                          value={contract.id}
+                          type="checkbox"
+                          onChange={handleChangeCheckbox}
+                        />
+                      </td>
                       <td>{contract.name}</td>
                       <td>{contract.value}</td>
+                      <td>{contract.createdIn}</td>
                       <td>
                         <Badge color="" className="badge-dot">
                           <i className={getBadge(contract.status)} />
                           {contract.status}
                         </Badge>
                       </td>
-                      <td>{contract.createdIn}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
@@ -361,7 +430,7 @@ const Contratos = () => {
                   <label className="form-control-label" htmlFor="startDate">
                     Data de Início
                   </label>
-                  <Input 
+                  <Input
                     type="date"
                     className="form-control-alternative"
                     name="startDate"
@@ -371,10 +440,10 @@ const Contratos = () => {
               </Col>
               <Col lg="3">
                 <FormGroup>
-                <label className="form-control-label" htmlFor="endDate">
+                  <label className="form-control-label" htmlFor="endDate">
                     Data de Encerramento
                   </label>
-                  <Input 
+                  <Input
                     type="date"
                     className="form-control-alternative"
                     name="endDate"
@@ -385,7 +454,7 @@ const Contratos = () => {
               <Col lg="12">
                 <FormGroup>
                   <label className="form-control-label">Descrição</label>
-                  <Input 
+                  <Input
                     type="textarea"
                     className="form-control-alternative"
                     rows="6"
