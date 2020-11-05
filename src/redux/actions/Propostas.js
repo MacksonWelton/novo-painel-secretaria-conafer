@@ -30,7 +30,7 @@ export const setComment = (comment) => ({
 
 export const downloadProposals  = (data) => () => {
   try {
-    console.log(data);
+    
   } catch (err) {
     console.error(err.message);
   }
@@ -38,7 +38,7 @@ export const downloadProposals  = (data) => () => {
 
 export const deleteProposals  = (data) => (dispatch) => {
   try {
-    console.log(data);
+    
     dispatch(removeProposals )
   } catch (err) {
     console.error(err.message);

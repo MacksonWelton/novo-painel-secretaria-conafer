@@ -1,6 +1,4 @@
 export const newCharges = (charges) => (dispatch) => {
-
-  console.log(charges)
   dispatch(setCharges(charges));
 };
 
@@ -13,7 +11,7 @@ export const setCharges = (charges) => ({
 
 export const downloadCharges = (data) => () => {
   try {
-    console.log(data);
+    
   } catch (err) {
     console.error(err.message);
   }
@@ -21,7 +19,7 @@ export const downloadCharges = (data) => () => {
 
 export const deleteCharges = (data) => (dispatch) => {
   try {
-    console.log(data);
+    
     dispatch(removeCharges )
   } catch (err) {
     console.error(err.message);

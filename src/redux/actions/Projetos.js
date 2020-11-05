@@ -65,7 +65,7 @@ export const deleteParticipant = (deleteParticipant) => ({
 
 export const downloadProjects  = (data) => () => {
   try {
-    console.log(data);
+    
   } catch (err) {
     console.error(err.message);
   }
@@ -73,7 +73,7 @@ export const downloadProjects  = (data) => () => {
 
 export const deleteProjects  = (data) => (dispatch) => {
   try {
-    console.log(data);
+    
     dispatch(removeProjects )
   } catch (err) {
     console.error(err.message);

@@ -22,7 +22,7 @@ export const setAnswers = (answers) => ({
 
 export const downloadSupports  = (data) => () => {
   try {
-    console.log(data);
+    
   } catch (err) {
     console.error(err.message);
   }
@@ -30,7 +30,7 @@ export const downloadSupports  = (data) => () => {
 
 export const deleteSupports  = (data) => (dispatch) => {
   try {
-    console.log(data);
+    
     dispatch(removeSupports )
   } catch (err) {
     console.error(err.message);

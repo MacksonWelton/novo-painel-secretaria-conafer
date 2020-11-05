@@ -29,7 +29,7 @@ export const setBudget = (budget) => ({
 
 export const downloadBudgets  = (data) => () => {
   try {
-    console.log(data);
+    
   } catch (err) {
     console.error(err.message);
   }
@@ -37,7 +37,7 @@ export const downloadBudgets  = (data) => () => {
 
 export const deleteBudgets  = (data) => (dispatch) => {
   try {
-    console.log(data);
+    
     dispatch(removeBudgets )
   } catch (err) {
     console.error(err.message);

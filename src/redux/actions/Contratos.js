@@ -31,7 +31,7 @@ const setComment = (comment) => ({
 
 export const downloadContracts = (data) => () => {
   try {
-    console.log(data);
+    
   } catch (err) {
     console.error(err.message);
   }
