@@ -27,16 +27,18 @@ import {
 
 import Header from "../../../components/Headers/Header";
 
-import { newBudgets, newComment } from "../../../redux/actions/Orcamentos";
+import { deleteBudgets, downloadBudgets, newBudgets, newComment } from "../../../redux/actions/Orcamentos";
 
 import OrcamentosData from "./OrcamentosData";
 import ProgressCard from "../../../components/ProgressCard/ProgressCard";
 import { Tr } from "./Styles";
 import { InputStyled } from "./Styles";
 import { CardHeaderStyled } from "./Styles";
+import BotoesDeAcao from "components/BotoesDeAcao/BotoesDeAcao";
 
 const Orcamentos = () => {
   const dispatch = useDispatch();
+  const budgets = useSelector((state) => state.BudgetsReducer.budgets);
 
   useEffect(() => {
     dispatch(newBudgets(OrcamentosData));
@@ -45,9 +47,33 @@ const Orcamentos = () => {
   const [open, setOpen] = useState(false);
   const [budget, setBudget] = useState({});
   const [input, setInput] = useState();
+  const [checkbox, setCheckbox] = useState([]);
 
   const handleChangeInput = (event) => {
     setInput(event.target.value);
+  };
+
+  const handleChangeCheckbox = (event) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setCheckbox([...checkbox, { id: value, checked }]);
+    } else {
+      setCheckbox(checkbox.filter((check) => check.id !== value));
+    }
+  };
+
+  const handleSelectAllCheckbox = (event) => {
+    const checked = event.target.checked;
+
+    if (checked) {
+      setCheckbox(
+        budgets.map((budget) => {
+          return { id: budget.id, checked: true };
+        })
+      );
+    } else {
+      setCheckbox([]);
+    }
   };
 
   const submitForm = (event) => {
@@ -55,7 +81,13 @@ const Orcamentos = () => {
     dispatch(newComment(input));
   };
 
-  const budgets = useSelector((state) => state.BudgetsReducer.budgets);
+  const handleDownloadsBudgets = () => {
+    dispatch(downloadBudgets(checkbox));
+  };
+
+  const handleDeleteBudgets = () => {
+    dispatch(deleteBudgets(checkbox));
+  };
 
   const getBadge = (status) => {
     switch (status) {
@@ -131,12 +163,31 @@ const Orcamentos = () => {
                 responsive
               >
                 <thead className="thead-dark">
+                  {checkbox.length > 0 && (
+                    <tr>
+                      <th></th>
+                      <th>
+                        <BotoesDeAcao
+                          handleDownloadsItems={handleDownloadsBudgets}
+                          handleDeleteItems={handleDeleteBudgets}
+                        />
+                      </th>
+                    </tr>
+                  )}
                   <tr>
+                    <th scope="col">
+                      <div className="d-flex justify-content-end align-items-center">
+                        <Input
+                          type="checkbox"
+                          onChange={handleSelectAllCheckbox}
+                        />
+                      </div>
+                    </th>
                     <th scope="col">Orçamento</th>
                     <th scope="col">Valor</th>
-                    <th scope="col">Status</th>
                     <th scope="col">Data</th>
                     <th scope="col">Data de Expiração</th>
+                    <th scope="col">Status</th>
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -149,16 +200,30 @@ const Orcamentos = () => {
                         setBudget(budget);
                       }}
                     >
+                      <td
+                        className="d-flex justify-content-end"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Input
+                          checked={
+                            checkbox.filter((check) => check.id === budget.id)
+                              .length
+                          }
+                          value={budget.id}
+                          type="checkbox"
+                          onChange={handleChangeCheckbox}
+                        />
+                      </td>
                       <td>{budget.name}</td>
                       <td>{budget.value}</td>
+                      <td>{budget.createdIn}</td>
+                      <td>{budget.expirationDate}</td>
                       <td>
                         <Badge color="" className="badge-dot">
                           <i className={getBadge(budget.status)} />
                           {budget.status}
                         </Badge>
                       </td>
-                      <td>{budget.createdIn}</td>
-                      <td>{budget.expirationDate}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
@@ -179,19 +244,7 @@ const Orcamentos = () => {
                               href="#pablo"
                               onClick={(e) => e.preventDefault()}
                             >
-                              Action
-                            </DropdownItem>
-                            <DropdownItem
-                              href="#pablo"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              Another action
-                            </DropdownItem>
-                            <DropdownItem
-                              href="#pablo"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              Something else here
+                              Excluir
                             </DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown>

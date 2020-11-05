@@ -61,3 +61,28 @@ export const deleteParticipant = (deleteParticipant) => ({
     deleteParticipant,
   },
 });
+
+
+export const downloadProjects  = (data) => () => {
+  try {
+    
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+
+export const deleteProjects  = (data) => (dispatch) => {
+  try {
+    
+    dispatch(removeProjects )
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+
+const removeProjects  = (projects) => ({
+  type: "DELETE_EMPLOYEES",
+  payload: {
+    projects
+  }
+})

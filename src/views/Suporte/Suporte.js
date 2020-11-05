@@ -27,16 +27,18 @@ import {
 
 import Header from "components/Headers/Header.js";
 
-import { newSupports, newAnswers } from "../../redux/actions/Suporte";
+import { newSupports, newAnswers, downloadSupports, deleteSupports } from "../../redux/actions/Suporte";
 
 import SuporteData from "./SuporteData";
 import { Tr } from "./styles";
 import ProgressCard from "components/ProgressCard/ProgressCard";
 import { InputStyled } from "views/Contratos/styles";
 import { CardHeaderStyled } from "views/Contratos/styles";
+import BotoesDeAcao from "components/BotoesDeAcao/BotoesDeAcao";
 
 const Suporte = () => {
   const dispatch = useDispatch();
+  const supports = useSelector((state) => state.SupportsReducer.supports);
 
   useEffect(() => {
     dispatch(newSupports(SuporteData));
@@ -50,10 +52,34 @@ const Suporte = () => {
     file: "",
     files: [],
   });
+  const [checkbox, setCheckbox] = useState([]);
 
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
     setInput({ ...input, [name]: value });
+  };
+
+  const handleChangeCheckbox = (event) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setCheckbox([...checkbox, { id: value, checked }]);
+    } else {
+      setCheckbox(checkbox.filter((check) => check.id !== value));
+    }
+  };
+
+  const handleSelectAllCheckbox = (event) => {
+    const checked = event.target.checked;
+
+    if (checked) {
+      setCheckbox(
+        supports.map((support) => {
+          return { id: support.id, checked: true };
+        })
+      );
+    } else {
+      setCheckbox([]);
+    }
   };
 
   const submitForm = (event) => {
@@ -61,7 +87,13 @@ const Suporte = () => {
     dispatch(newAnswers(input));
   };
 
-  const supports = useSelector((state) => state.SupportsReducer.supports);
+  const handleDownloadsSupports = () => {
+    dispatch(downloadSupports(checkbox));
+  };
+
+  const handleDeleteSupports = () => {
+    dispatch(deleteSupports(checkbox));
+  };
 
   const getBadge = (status) => {
     switch (status) {
@@ -128,11 +160,30 @@ const Suporte = () => {
                 responsive
               >
                 <thead className="thead-dark">
+                  {checkbox.length > 0 && (
+                    <tr>
+                      <th></th>
+                      <th>
+                        <BotoesDeAcao
+                          handleDownloadsItems={handleDownloadsSupports}
+                          handleDeleteItems={handleDeleteSupports}
+                        />
+                      </th>
+                    </tr>
+                  )}
                   <tr>
+                    <th scope="col">
+                      <div className="d-flex justify-content-end align-items-center">
+                        <Input
+                          type="checkbox"
+                          onChange={handleSelectAllCheckbox}
+                        />
+                      </div>
+                    </th>
                     <th scope="col">Chamado</th>
-                    <th scope="col">Status</th>
                     <th scope="col">Criado em</th>
                     <th scope="col">última Resposta</th>
+                    <th scope="col">Status</th>
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -145,15 +196,29 @@ const Suporte = () => {
                         setSupport(support);
                       }}
                     >
+                      <td
+                        className="d-flex justify-content-end"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Input
+                          checked={
+                            checkbox.filter((check) => check.id === support.id)
+                              .length
+                          }
+                          value={support.id}
+                          type="checkbox"
+                          onChange={handleChangeCheckbox}
+                        />
+                      </td>
                       <td>{support.id}</td>
+                      <td>{support.createdIn}</td>
+                      <td>{support.lastAnswer}</td>
                       <td>
                         <Badge color="" className="badge-dot">
                           <i className={getBadge(support.status)} />
                           {support.status}
                         </Badge>
                       </td>
-                      <td>{support.createdIn}</td>
-                      <td>{support.lastAnswer}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle

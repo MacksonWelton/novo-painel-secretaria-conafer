@@ -73,14 +73,6 @@ var routes = [
     layout: "/admin",
   },
   {
-    show: true,
-    path: "/user-profile",
-    name: "Meu Perfil",
-    icon: "ni ni-single-02 text-black",
-    component: Profile,
-    layout: "/admin",
-  },
-  {
     dropdown: true,
     title: "Afiliados",
     icon: "fas fa-city text-purple",
@@ -121,6 +113,14 @@ var routes = [
   },
   {
     show: true,
+    path: "/user-profile",
+    name: "Meu Perfil",
+    icon: "ni ni-single-02 text-black",
+    component: Profile,
+    layout: "/admin",
+  },
+  {
+    show: true,
     path: "/suporte",
     name: "Suporte",
     icon: "ni ni-support-16 text-red",
@@ -151,6 +151,5 @@ var routes = [
     component: Register,
     layout: "/auth",
   },
-
 ];
 export default routes;

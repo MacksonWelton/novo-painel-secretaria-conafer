@@ -29,16 +29,18 @@ import {
 
 import Header from "../../../components/Headers/Header";
 
-import { newCharges } from "../../../redux/actions/Cobrancas";
+import { deleteCharges, downloadCharges, newCharges } from "../../../redux/actions/Cobrancas";
 
 import CobrancasData from "./CobrancasData";
 import ProgressCard from "../../../components/ProgressCard/ProgressCard";
 import { Tr } from "./Styles";
 import { InputStyled } from "./Styles";
 import { CardHeaderStyled } from "./Styles";
+import BotoesDeAcao from "components/BotoesDeAcao/BotoesDeAcao";
 
 const Orcamentos = () => {
   const dispatch = useDispatch();
+  const charges = useSelector((state) => state.ChargesReducer.charges);
 
   useEffect(() => {
     dispatch(newCharges(CobrancasData));
@@ -48,17 +50,47 @@ const Orcamentos = () => {
   const [openAddCharge, setOpenAddCharge] = useState(false);
   const [charge, setCharge] = useState({});
   const [input, setInput] = useState();
+  const [checkbox, setCheckbox] = useState([]);
 
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
     setInput({...input, [name]: value});
   };
 
+  const handleChangeCheckbox = (event) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setCheckbox([...checkbox, { id: value, checked }]);
+    } else {
+      setCheckbox(checkbox.filter((check) => check.id !== value));
+    }
+  };
+
+  const handleSelectAllCheckbox = (event) => {
+    const checked = event.target.checked;
+
+    if (checked) {
+      setCheckbox(
+        charges.map((charge) => {
+          return { id: charge.id, checked: true };
+        })
+      );
+    } else {
+      setCheckbox([]);
+    }
+  };
+
   const submitForm = (event) => {
     event.preventDefault();
   };
 
-  const charges = useSelector((state) => state.ChargesReducer.charges);
+  const handleDownloadsCharges = () => {
+    dispatch(downloadCharges(checkbox));
+  };
+
+  const handleDeleteCharges = () => {
+    dispatch(deleteCharges(checkbox));
+  };
 
   const getBadge = (status) => {
     switch (status) {
@@ -139,7 +171,26 @@ const Orcamentos = () => {
                 responsive
               >
                 <thead className="thead-dark">
+                {checkbox.length > 0 && (
+                    <tr>
+                      <th></th>
+                      <th>
+                        <BotoesDeAcao 
+                          handleDownloadsItems={handleDownloadsCharges}
+                          handleDeleteItems={handleDeleteCharges}
+                        />
+                      </th>
+                    </tr>
+                  )}
                   <tr>
+                  <th scope="col">
+                      <div className="d-flex justify-content-end align-items-center">
+                        <Input
+                          type="checkbox"
+                          onChange={handleSelectAllCheckbox}
+                        />
+                      </div>
+                    </th>
                     <th scope="col">CPF ou CNPJ</th>
                     <th scope="col">Data de Cobrança</th>
                     <th scope="col">Data de Vencimento</th>
@@ -157,6 +208,20 @@ const Orcamentos = () => {
                         setCharge(charge);
                       }}
                     >
+                      <td
+                        className="d-flex justify-content-end"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Input
+                          checked={
+                            checkbox.filter((check) => check.id === charge.id)
+                              .length
+                          }
+                          value={charge.id}
+                          type="checkbox"
+                          onChange={handleChangeCheckbox}
+                        />
+                      </td>
                       <td>{charge.cpf_cnpj}</td>
                       <td>{charge.value}</td>
                       <td>{charge.date_of_charge}</td>

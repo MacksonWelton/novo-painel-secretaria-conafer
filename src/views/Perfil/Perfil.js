@@ -14,6 +14,11 @@ import {
   Col,
   Form,
   FormGroup,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Input,
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
@@ -29,7 +34,7 @@ const Perfil = () => {
     photo: "",
     cover: "",
   });
-  
+
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -94,7 +99,6 @@ const Perfil = () => {
                   <Button
                     className="mr-4"
                     color="info"
-                    href="#pablo"
                     onClick={() => setOpen(!open)}
                     size="sm"
                     title="Alterar Senha"
@@ -148,6 +152,58 @@ const Perfil = () => {
           </Col>
         </Row>
       </Container>
+      <Modal
+        isOpen={open}
+        toggle={() => {
+          setOpen(!open);
+        }}
+        size="sm"
+        centered
+      >
+        <ModalHeader
+          toggle={() => {
+            setOpen(!open);
+          }}
+        >
+          Alterar Senha
+        </ModalHeader>
+        <Form>
+          <ModalBody>
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="password">
+                    Senha
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    type="password"
+                    name="password"
+                    onChange={handleChangeInput}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg="12">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="password">
+                    Digite Novamente
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    type="password"
+                    name="password"
+                    onChange={handleChangeInput}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+          </ModalBody>
+          <ModalFooter>
+            <Button type="submit" color="primary">Alterar</Button>
+            <Button onClick={() => setOpen(!open)}>Cancelar</Button>
+          </ModalFooter>
+        </Form>
+      </Modal>
     </>
   );
 };

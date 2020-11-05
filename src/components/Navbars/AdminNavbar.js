@@ -84,12 +84,12 @@ class AdminNavbar extends React.Component {
                     <i className="ni ni-single-02" />
                     <span>Meu Perfil</span>
                   </DropdownItem>
-                  <DropdownItem to="/admin/user-profile" tag={Link}>
+                  <DropdownItem to="/admin/suporte" tag={Link}>
                     <i className="ni ni-support-16" />
                     <span>Suporte</span>
                   </DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                  <DropdownItem to="/auth/index" tag={Link}>
                     <i className="ni ni-user-run" />
                     <span>Sair</span>
                   </DropdownItem>
