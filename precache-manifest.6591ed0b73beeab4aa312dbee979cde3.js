@@ -1,31 +1,31 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6aa7c15d093edcd0c8384509d509f2b1",
+    "revision": "08925499d1e8cc128cf7374116bffd8e",
     "url": "/novo-painel-secretaria-conafer/index.html"
   },
   {
-    "revision": "6b04da612b9a9eddc019",
+    "revision": "e13a6776bc484da2399c",
     "url": "/novo-painel-secretaria-conafer/static/css/2.8a7664a6.chunk.css"
   },
   {
-    "revision": "603dac993b7582118204",
+    "revision": "4c6e6f01f53af6e82291",
     "url": "/novo-painel-secretaria-conafer/static/css/main.2388cb6a.chunk.css"
   },
   {
-    "revision": "6b04da612b9a9eddc019",
-    "url": "/novo-painel-secretaria-conafer/static/js/2.aa37513a.chunk.js"
+    "revision": "e13a6776bc484da2399c",
+    "url": "/novo-painel-secretaria-conafer/static/js/2.f6c61aad.chunk.js"
   },
   {
     "revision": "eb998825b368fb48328883d1b978652a",
-    "url": "/novo-painel-secretaria-conafer/static/js/2.aa37513a.chunk.js.LICENSE.txt"
+    "url": "/novo-painel-secretaria-conafer/static/js/2.f6c61aad.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "603dac993b7582118204",
-    "url": "/novo-painel-secretaria-conafer/static/js/main.c0afb910.chunk.js"
+    "revision": "4c6e6f01f53af6e82291",
+    "url": "/novo-painel-secretaria-conafer/static/js/main.b5cfe4db.chunk.js"
   },
   {
     "revision": "8d0d562f4ec3c131ac27d52de65ecd17",
-    "url": "/novo-painel-secretaria-conafer/static/js/main.c0afb910.chunk.js.LICENSE.txt"
+    "url": "/novo-painel-secretaria-conafer/static/js/main.b5cfe4db.chunk.js.LICENSE.txt"
   },
   {
     "revision": "d764a5a1c57fd6edc43f",
@@ -98,10 +98,6 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "2fb66b88a043dbdcb51a351431f84d04",
     "url": "/novo-painel-secretaria-conafer/static/media/facebook.2fb66b88.svg"
-  },
-  {
-    "revision": "4ffd4fe7945af123788bf5888296c696",
-    "url": "/novo-painel-secretaria-conafer/static/media/github.4ffd4fe7.svg"
   },
   {
     "revision": "87be59a1f7061fc6021876aad6fee028",

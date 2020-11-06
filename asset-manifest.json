@@ -1,24 +1,23 @@
 {
   "files": {
     "main.css": "/novo-painel-secretaria-conafer/static/css/main.2388cb6a.chunk.css",
-    "main.js": "/novo-painel-secretaria-conafer/static/js/main.c0afb910.chunk.js",
-    "main.js.map": "/novo-painel-secretaria-conafer/static/js/main.c0afb910.chunk.js.map",
+    "main.js": "/novo-painel-secretaria-conafer/static/js/main.b5cfe4db.chunk.js",
+    "main.js.map": "/novo-painel-secretaria-conafer/static/js/main.b5cfe4db.chunk.js.map",
     "runtime-main.js": "/novo-painel-secretaria-conafer/static/js/runtime-main.81ae7049.js",
     "runtime-main.js.map": "/novo-painel-secretaria-conafer/static/js/runtime-main.81ae7049.js.map",
     "static/css/2.8a7664a6.chunk.css": "/novo-painel-secretaria-conafer/static/css/2.8a7664a6.chunk.css",
-    "static/js/2.aa37513a.chunk.js": "/novo-painel-secretaria-conafer/static/js/2.aa37513a.chunk.js",
-    "static/js/2.aa37513a.chunk.js.map": "/novo-painel-secretaria-conafer/static/js/2.aa37513a.chunk.js.map",
+    "static/js/2.f6c61aad.chunk.js": "/novo-painel-secretaria-conafer/static/js/2.f6c61aad.chunk.js",
+    "static/js/2.f6c61aad.chunk.js.map": "/novo-painel-secretaria-conafer/static/js/2.f6c61aad.chunk.js.map",
     "index.html": "/novo-painel-secretaria-conafer/index.html",
-    "precache-manifest.977d536a762d7df75dae2f4f042ca0a6.js": "/novo-painel-secretaria-conafer/precache-manifest.977d536a762d7df75dae2f4f042ca0a6.js",
+    "precache-manifest.6591ed0b73beeab4aa312dbee979cde3.js": "/novo-painel-secretaria-conafer/precache-manifest.6591ed0b73beeab4aa312dbee979cde3.js",
     "service-worker.js": "/novo-painel-secretaria-conafer/service-worker.js",
     "static/css/2.8a7664a6.chunk.css.map": "/novo-painel-secretaria-conafer/static/css/2.8a7664a6.chunk.css.map",
     "static/css/main.2388cb6a.chunk.css.map": "/novo-painel-secretaria-conafer/static/css/main.2388cb6a.chunk.css.map",
-    "static/js/2.aa37513a.chunk.js.LICENSE.txt": "/novo-painel-secretaria-conafer/static/js/2.aa37513a.chunk.js.LICENSE.txt",
-    "static/js/main.c0afb910.chunk.js.LICENSE.txt": "/novo-painel-secretaria-conafer/static/js/main.c0afb910.chunk.js.LICENSE.txt",
+    "static/js/2.f6c61aad.chunk.js.LICENSE.txt": "/novo-painel-secretaria-conafer/static/js/2.f6c61aad.chunk.js.LICENSE.txt",
+    "static/js/main.b5cfe4db.chunk.js.LICENSE.txt": "/novo-painel-secretaria-conafer/static/js/main.b5cfe4db.chunk.js.LICENSE.txt",
     "static/media/argon-react.png": "/novo-painel-secretaria-conafer/static/media/argon-react.f38ddea9.png",
     "static/media/all.min.css": "/novo-painel-secretaria-conafer/static/media/fa-solid-900.cdfec5cf.woff",
     "static/media/facebook.svg": "/novo-painel-secretaria-conafer/static/media/facebook.2fb66b88.svg",
-    "static/media/github.svg": "/novo-painel-secretaria-conafer/static/media/github.4ffd4fe7.svg",
     "static/media/google.svg": "/novo-painel-secretaria-conafer/static/media/google.87be59a1.svg",
     "static/media/nucleo.css": "/novo-painel-secretaria-conafer/static/media/nucleo-icons.f82ec6ba.ttf",
     "static/media/profile-cover.jpg": "/novo-painel-secretaria-conafer/static/media/profile-cover.e2582654.jpg",
@@ -31,8 +30,8 @@
   "entrypoints": [
     "static/js/runtime-main.81ae7049.js",
     "static/css/2.8a7664a6.chunk.css",
-    "static/js/2.aa37513a.chunk.js",
+    "static/js/2.f6c61aad.chunk.js",
     "static/css/main.2388cb6a.chunk.css",
-    "static/js/main.c0afb910.chunk.js"
+    "static/js/main.b5cfe4db.chunk.js"
   ]
 }
