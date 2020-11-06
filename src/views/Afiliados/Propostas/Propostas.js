@@ -37,8 +37,8 @@ import { Tr } from "./styles";
 import ProgressCard from "components/ProgressCard/ProgressCard";
 import { InputStyled } from "views/Contratos/styles";
 import { CardHeaderStyled } from "views/Contratos/styles";
-import Header from "components/Headers/Header";
-import BotoesDeAcao from "components/BotoesDeAcao/BotoesDeAcao";
+import Header from "../../../components/Headers/Header";
+import BotoesDeAcao from "../../../components/BotoesDeAcao/BotoesDeAcao";
 
 const Propostas = () => {
   const dispatch = useDispatch();

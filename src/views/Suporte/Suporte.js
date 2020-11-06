@@ -31,10 +31,10 @@ import { newSupports, newAnswers, downloadSupports, deleteSupports } from "../..
 
 import SuporteData from "./SuporteData";
 import { Tr } from "./styles";
-import ProgressCard from "components/ProgressCard/ProgressCard";
+import ProgressCard from "../../components/ProgressCard/ProgressCard";
 import { InputStyled } from "views/Contratos/styles";
 import { CardHeaderStyled } from "views/Contratos/styles";
-import BotoesDeAcao from "components/BotoesDeAcao/BotoesDeAcao";
+import BotoesDeAcao from "../../components/BotoesDeAcao/BotoesDeAcao";
 
 const Suporte = () => {
   const dispatch = useDispatch();

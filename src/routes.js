@@ -1,14 +1,18 @@
 import Index from "views/Index.js";
 import Profile from "views/Perfil/Perfil.js";
-import Register from "views/examples/Register.js";
 import Login from "views/Login/Login.js";
-import Contratos from "views/Contratos/Contratos";
-import Colaboradores from "views/Colaboradores/Colaboradores";
-import Orcamentos from "views/Orcamentos/Orcamentos";
+import RecuperarSenha from "views/RecuperarSenha/RecuperarSenha";
+
+//Secretaria
+import Colaboradores from "views/GerenciarSecretaria/Colaboradores/Colaboradores";
+import ContratosSecretaria from "views/GerenciarSecretaria/Contratos/Contratos";
+import Orcamentos from "views/GerenciarSecretaria/Orcamentos/Orcamentos";
+import ProjetosSecretaria from "views/Projetos/Projetos";
+
+//Secretário e Colaboradores
 import Projetos from "views/Projetos/Projetos";
 import Projeto from "views/Projetos/Projeto/Projeto";
 import Suporte from "views/Suporte/Suporte";
-import RecuperarSenha from "views/RecuperarSenha/RecuperarSenha";
 
 //Afiliados
 import ContratosAfiliados from "views/Afiliados/Contratos/Contratos";
@@ -32,10 +36,18 @@ var routes = [
     items: [
       {
         show: true,
-        path: "/contratos",
+        path: "/secretaria/contratos",
         name: "Contratos",
         icon: "ni ni-single-copy-04 text-green",
-        component: Contratos,
+        component: ContratosSecretaria,
+        layout: "/admin",
+      },
+      {
+        show: true,
+        path: "/orcamentos",
+        name: "Orçamentos",
+        icon: "fas fa-coins text-yellow",
+        component: Orcamentos,
         layout: "/admin",
       },
       {
@@ -46,15 +58,15 @@ var routes = [
         component: Colaboradores,
         layout: "/admin",
       },
+      {
+        show: true,
+        path: "/secretaria/projetos",
+        name: "Projetos",
+        icon: "fas fa-project-diagram text-info",
+        component: ProjetosSecretaria,
+        layout: "/admin",
+      },
     ],
-  },
-  {
-    show: true,
-    path: "/orcamentos",
-    name: "Orçamentos",
-    icon: "fas fa-coins text-yellow",
-    component: Orcamentos,
-    layout: "/admin",
   },
   {
     show: true,
@@ -141,14 +153,6 @@ var routes = [
     name: "Recuperar Senha",
     icon: "ni ni-key-25 text-info",
     component: RecuperarSenha,
-    layout: "/auth",
-  },
-  {
-    show: false,
-    path: "/register",
-    name: "Register",
-    icon: "ni ni-circle-08 text-pink",
-    component: Register,
     layout: "/auth",
   },
 ];

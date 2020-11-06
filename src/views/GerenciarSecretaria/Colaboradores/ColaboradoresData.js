@@ -1,4 +1,4 @@
-import photo from "../../assets/img/theme/team-4-800x800.jpg";
+import photo from "../../../assets/img/theme/team-4-800x800.jpg";
 
 const ColaboresData = [
   {

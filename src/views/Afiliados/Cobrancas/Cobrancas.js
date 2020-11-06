@@ -36,7 +36,7 @@ import ProgressCard from "../../../components/ProgressCard/ProgressCard";
 import { Tr } from "./Styles";
 import { InputStyled } from "./Styles";
 import { CardHeaderStyled } from "./Styles";
-import BotoesDeAcao from "components/BotoesDeAcao/BotoesDeAcao";
+import BotoesDeAcao from "../../../components/BotoesDeAcao/BotoesDeAcao";
 
 const Orcamentos = () => {
   const dispatch = useDispatch();
