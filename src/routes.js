@@ -7,7 +7,6 @@ import RecuperarSenha from "views/RecuperarSenha/RecuperarSenha";
 import Colaboradores from "views/GerenciarSecretaria/Colaboradores/Colaboradores";
 import ContratosSecretaria from "views/GerenciarSecretaria/Contratos/Contratos";
 import Orcamentos from "views/GerenciarSecretaria/Orcamentos/Orcamentos";
-import ProjetosSecretaria from "views/Projetos/Projetos";
 
 //Secretário e Colaboradores
 import Projetos from "views/Projetos/Projetos";
@@ -56,14 +55,6 @@ var routes = [
         name: "Colaboradores",
         icon: "fas fa-users text-black",
         component: Colaboradores,
-        layout: "/admin",
-      },
-      {
-        show: true,
-        path: "/secretaria/projetos",
-        name: "Projetos",
-        icon: "fas fa-project-diagram text-info",
-        component: ProjetosSecretaria,
         layout: "/admin",
       },
     ],
