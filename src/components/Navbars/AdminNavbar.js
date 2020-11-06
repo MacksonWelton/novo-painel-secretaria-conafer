@@ -84,6 +84,10 @@ class AdminNavbar extends React.Component {
                     <i className="ni ni-single-02" />
                     <span>Meu Perfil</span>
                   </DropdownItem>
+                  <DropdownItem to="/admin/secretaria/secretaria" tag={Link}>
+                    <i className="fas fa-landmark" />
+                    <span>Secretaria</span>
+                  </DropdownItem>
                   <DropdownItem to="/admin/suporte" tag={Link}>
                     <i className="ni ni-support-16" />
                     <span>Suporte</span>
