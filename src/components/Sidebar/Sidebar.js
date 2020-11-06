@@ -91,18 +91,22 @@ class Sidebar extends React.Component {
             </DropdownToggle>
             <DropdownMenu className="shadow ml-4 bg-white rounded">
               {prop.items.map((item, key) => {
-                return (
-                  <NavItem key={key}>
-                  <NavLink
-                    to={item.layout + item.path}
-                    tag={NavLinkRRD}
-                    onClick={this.closeCollapse}
-                  >
-                    <i className={item.icon} />
-                    {item.name}
-                  </NavLink>
-                  </NavItem>
-                );
+                if (item.show) {
+                  return (
+                    <div key={key}>
+                      <NavLink
+                        to={item.layout + item.path}
+                        tag={NavLinkRRD}
+                        onClick={this.closeCollapse}
+                      >
+                        <i className={item.icon} />
+                        {item.name}
+                      </NavLink>
+                    </div>
+                  );
+                } else {
+                  return null;
+                }
               })}
             </DropdownMenu>
           </Dropdown>

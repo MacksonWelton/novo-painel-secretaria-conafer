@@ -18,48 +18,84 @@ import {
   Row,
   Modal,
   Button,
-  Input,
-  Form,
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Nav,
+  NavItem,
+  NavLink,
+  Form,
+  Input,
 } from "reactstrap";
 
-import Header from "../../components/Headers/Header";
+import Header from "../../../components/Headers/Header";
 
+import ColaboradoresData from "./ColaboradoresData";
+import { CardHeaderStyled, InputStyled, Tr } from "./styles";
+import ProgressCard from "../../../components/ProgressCard/ProgressCard";
 import {
-  deleteBudgets,
-  downloadBudgets,
-  newBudgets,
-  newComment,
-} from "../../redux/actions/Orcamentos";
+  newEmployees,
+  downloadEmployees,
+  deleteEmployees,
+} from "redux/actions/Colaboradores";
+import Colaborador from "components/Colaborador/Colaborador";
+import EditarColaborador from "components/Colaborador/EditarColaborador";
 
-import OrcamentosData from "./OrcamentosData";
-import ProgressCard from "../../components/ProgressCard/ProgressCard";
-import { Tr } from "./Styles";
-import { InputStyled } from "./Styles";
-import { CardHeaderStyled } from "./Styles";
-import BotoesDeAcao from "components/BotoesDeAcao/BotoesDeAcao";
+import user from "../../../assets/img/theme/user.png";
+import BotoesDeAcao from "../../../components/BotoesDeAcao/BotoesDeAcao";
 
-const Orcamentos = () => {
+const Colaboradores = () => {
   const dispatch = useDispatch();
-  const budgets = useSelector((state) => state.BudgetsReducer.budgets);
+  const employees = useSelector((state) => state.EmployeesReducer.employees);
 
   useEffect(() => {
-    dispatch(newBudgets(OrcamentosData));
+    dispatch(newEmployees(ColaboradoresData));
   }, [dispatch]);
 
   const [open, setOpen] = useState(false);
-  const [budget, setBudget] = useState({});
-  const [input, setInput] = useState();
+  const [employee, setEmployee] = useState({});
+  const [tab, setTab] = useState("Dados");
+  const [input, setInput] = useState({
+    photo: user,
+    name: "",
+    dateBirth: "",
+    sex: "",
+    education: "",
+    position: "",
+    salary: "",
+    cpf: "",
+    rg: "",
+    district: "",
+    admission_date: "",
+    emission_date: "",
+    organ_issuing: "",
+    voter_title: "",
+    electoral_zone: "",
+    section: "",
+    email: "",
+    citizenship: "",
+    address: "",
+    cep: "",
+    city: "",
+    state: undefined,
+    marital_status: undefined,
+  });
   const [checkbox, setCheckbox] = useState([]);
+  const [newPhoto, setNewPhoto] = useState(true);
+  const [openAddContract, setOpenAddContract] = useState(false);
+
+  const handleChangeInput = (event) => {
+    const { name, value } = event.target;
+    setInput({ ...input, [name]: value });
+  };
 
   const handleChangeCheckbox = (event) => {
     const { value, checked } = event.target;
+
     if (checked) {
-      setCheckbox([...checkbox, { id: value, checked }]);
+      setCheckbox([...checkbox, { cpf: value, checked }]);
     } else {
-      setCheckbox(checkbox.filter((check) => check.id !== value));
+      setCheckbox(checkbox.filter((check) => check.cpf !== value));
     }
   };
 
@@ -68,8 +104,8 @@ const Orcamentos = () => {
 
     if (checked) {
       setCheckbox(
-        budgets.map((budget) => {
-          return { id: budget.id, checked: true };
+        employees.map((employee) => {
+          return { cpf: employee.cpf, checked: true };
         })
       );
     } else {
@@ -77,33 +113,41 @@ const Orcamentos = () => {
     }
   };
 
-  const handleDownloadsBudgets = () => {
-    dispatch(downloadBudgets(checkbox));
-  };
+  const handleSelectFile = (event) => {
+    const name = event.target.name;
+    const value = event.target.files[0];
 
-  const handleDeleteBudgets = () => {
-    dispatch(deleteBudgets(checkbox));
-  };
+    if (value === undefined) {
+      setInput({ ...input, [name]: user });
+    } else {
+      setInput({ ...input, [name]: value });
+    }
 
-  const handleChangeInput = (event) => {
-    setInput(event.target.value);
+    setNewPhoto(
+      value ? { ...newPhoto, [name]: value.name } : { ...newPhoto, [name]: "" }
+    );
   };
 
   const submitForm = (event) => {
     event.preventDefault();
-    dispatch(newComment(input));
+  };
+
+  const handleDownloadsEmployees = () => {
+    dispatch(downloadEmployees(checkbox));
+  };
+
+  const handleDeleteEmployees = () => {
+    dispatch(deleteEmployees(checkbox));
   };
 
   const getBadge = (status) => {
     switch (status) {
-      case "Enviado":
+      case "Ativo/a":
         return "bg-blue";
-      case "Expirado":
-        return "bg-yellow";
-      case "Declinado":
+      case "Inativo/a":
+        return "bg-secondary";
+      case "Banido/a":
         return "bg-red";
-      case "Aceito":
-        return "bg-green";
       default:
         return "primary";
     }
@@ -111,48 +155,42 @@ const Orcamentos = () => {
 
   const CardData = [
     {
-      title: "Enviados",
-      progress: budgets.filter((contract) => contract.status === "Enviado")
+      title: "Ativos",
+      progress: employees.filter((employees) => employees.status === "Ativo/a")
         .length,
-      max: budgets.length,
-      icon: "fas fa-stopwatch",
+      max: employees.length,
+      icon: "fas fa-user-check",
       color: "blue",
     },
     {
-      title: "Expirados",
-      progress: budgets.filter((contract) => contract.status === "Expirado")
-        .length,
-      max: budgets.length,
-      icon: "fas fa-exclamation-triangle",
-      color: "yellow",
+      title: "Inativos",
+      progress: employees.filter(
+        (employees) => employees.status === "Inativo/a"
+      ).length,
+      max: employees.length,
+      icon: "fas fa-user-times",
+      color: "gray",
     },
     {
-      title: "Declinados",
-      progress: budgets.filter((contract) => contract.status === "Declinado")
+      title: "Banidos",
+      progress: employees.filter((employees) => employees.status === "Banido/a")
         .length,
-      max: budgets.length,
-      icon: "fas fa-times",
+      max: employees.length,
+      icon: "fas fa-user-alt-slash",
       color: "red",
-    },
-    {
-      title: "Aceitos",
-      progress: budgets.filter((contract) => contract.status === "Aceito")
-        .length,
-      max: budgets.length,
-      icon: "fas fa-check",
-      color: "green",
     },
   ];
 
   return (
     <>
       <Header children={<ProgressCard CardData={CardData} />} />
+
       <Container className="mt--7" fluid>
         <Row className="mt-5">
           <div className="col">
             <Card className="bg-default shadow">
               <CardHeaderStyled>
-                <h3 className="text-white mb-0">Lista de Orçamentos</h3>
+                <h3 className="text-white mb-0">Lista de Colaboradores</h3>
                 <div className="d-flex align-items-center">
                   <InputStyled type="text" placeholder="Pesquisar..." />
                   <Button className="bg-transparent border-0">
@@ -160,7 +198,12 @@ const Orcamentos = () => {
                   </Button>
                 </div>
                 <div>
-                  <Button color="primary">Adicionar</Button>
+                  <Button
+                    color="primary"
+                    onClick={() => setOpenAddContract(!open)}
+                  >
+                    Adicionar
+                  </Button>
                 </div>
               </CardHeaderStyled>
               <Table
@@ -173,8 +216,8 @@ const Orcamentos = () => {
                       <th></th>
                       <th>
                         <BotoesDeAcao
-                          handleDownloadsItems={handleDownloadsBudgets}
-                          handleDeleteItems={handleDeleteBudgets}
+                          handleDownloadsItems={handleDownloadsEmployees}
+                          handleDeleteItems={handleDeleteEmployees}
                         />
                       </th>
                     </tr>
@@ -188,21 +231,21 @@ const Orcamentos = () => {
                         />
                       </div>
                     </th>
-                    <th scope="col">Orçamento</th>
-                    <th scope="col">Valor</th>
-                    <th scope="col">Data</th>
-                    <th scope="col">Data de Expiração</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Nascimento</th>
+                    <th scope="col">Cargo</th>
+                    <th scope="col">Endereço</th>
                     <th scope="col">Status</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {budgets.map((budget, index) => (
+                  {employees.map((employees, index) => (
                     <Tr
                       key={index}
                       onClick={() => {
                         setOpen(!open);
-                        setBudget(budget);
+                        setEmployee(employees);
                       }}
                     >
                       <td
@@ -211,22 +254,23 @@ const Orcamentos = () => {
                       >
                         <Input
                           checked={
-                            checkbox.filter((check) => check.id === budget.id)
-                              .length
+                            checkbox.filter(
+                              (check) => check.cpf === employees.cpf
+                            ).length
                           }
-                          value={budget.id}
+                          value={employees.cpf}
                           type="checkbox"
                           onChange={handleChangeCheckbox}
                         />
                       </td>
-                      <td>{budget.name}</td>
-                      <td>{budget.value}</td>
-                      <td>{budget.createdIn}</td>
-                      <td>{budget.expirationDate}</td>
+                      <td>{employees.name}</td>
+                      <td>{employees.dateBirth}</td>
+                      <td>{employees.position}</td>
+                      <td>{employees.address}</td>
                       <td>
                         <Badge color="" className="badge-dot">
-                          <i className={getBadge(budget.status)} />
-                          {budget.status}
+                          <i className={getBadge(employees.status)} />
+                          {employees.status}
                         </Badge>
                       </td>
                       <td className="text-right">
@@ -249,7 +293,25 @@ const Orcamentos = () => {
                               href="#pablo"
                               onClick={(e) => e.preventDefault()}
                             >
-                              Excluir
+                              Ativar
+                            </DropdownItem>
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              Desativar
+                            </DropdownItem>
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              Banir
+                            </DropdownItem>
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              Excluir Definitivamente
                             </DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown>
@@ -326,52 +388,46 @@ const Orcamentos = () => {
             setOpen(!open);
           }}
         >
-          {budget.name}
+          Colaborador
         </ModalHeader>
         <ModalBody>
-          <>
-            <p className="mb-0">{budget.description}</p>
-            <p className="h6 mb-3">Criado em: {budget.createdIn}</p>
-          </>
-          <>
-            {budget.comments &&
-              budget.comments.map((comment, index) => (
-                <div
-                  key={index}
-                  className={
-                    comment.mainComment !== null
-                      ? "p-3 rounded bg-default text-white"
-                      : "p-3 mb-3 rounded bg-light"
-                  }
-                >
-                  <p>
-                    <b>{comment.createdBy}</b>
-                  </p>
-                  <p>{comment.comment}</p>
-                  <p
-                    className={
-                      comment.mainComment !== null ? "h6 text-white" : "h6"
-                    }
-                  >
-                    Criado em: {comment.createdIn}
-                  </p>
-                </div>
-              ))}
+          <Nav tabs className="mb-3">
+            <NavItem>
+              <NavLink
+                href="#"
+                onClick={() => setTab("Dados")}
+                active={tab === "Dados"}
+              >
+                Dados
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                href="#"
+                onClick={() => {
+                  setInput(employee);
+                  setTab("Editar");
+                  setNewPhoto(!newPhoto);
+                }}
+                active={tab === "Editar"}
+              >
+                Editar
+              </NavLink>
+            </NavItem>
+          </Nav>
+          {tab === "Dados" ? (
+            <Colaborador employee={employee} />
+          ) : (
             <Form onSubmit={submitForm}>
-              <Input
-                className="mb-3 mt-5"
-                placeholder="Digite uma nova resposta..."
-                onChange={handleChangeInput}
-                rows="4"
-                type="textarea"
+              <EditarColaborador
+                title="Editar Dados"
+                input={input}
+                handleChangeInput={handleChangeInput}
+                handleSelectFile={handleSelectFile}
+                newPhoto={newPhoto}
               />
-              <div className="d-flex justify-content-end">
-                <Button type="submit" color="primary">
-                  Comentar
-                </Button>
-              </div>
             </Form>
-          </>
+          )}
         </ModalBody>
         <ModalFooter className="d-flex justify-content-end">
           <Button color="secondary" onClick={() => setOpen(!open)}>
@@ -379,8 +435,47 @@ const Orcamentos = () => {
           </Button>
         </ModalFooter>
       </Modal>
+      <Modal
+        isOpen={openAddContract}
+        toggle={() => {
+          setOpenAddContract(!openAddContract);
+        }}
+        size="lg"
+      >
+        <ModalHeader
+          toggle={() => {
+            setOpenAddContract(!openAddContract);
+          }}
+        >
+          Adicionar Novo Contrato
+        </ModalHeader>
+        <Form onSubmit={submitForm}>
+          <ModalBody>
+            <EditarColaborador
+              title="Adicionar Colaborador"
+              input={input}
+              handleChangeInput={handleChangeInput}
+              handleSelectFile={handleSelectFile}
+              newPhoto={newPhoto}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button type="button" color="primary">
+              Adicionar
+            </Button>
+            <Button
+              color="secondary"
+              onClick={() => {
+                setOpenAddContract(!openAddContract);
+              }}
+            >
+              Cancelar
+            </Button>
+          </ModalFooter>
+        </Form>
+      </Modal>
     </>
   );
 };
 
-export default Orcamentos;
+export default Colaboradores;

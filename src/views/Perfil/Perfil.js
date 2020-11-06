@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import EditarColaborador from "components/Colaborador/EditarColaborador";
+import EditarColaborador from "../../components/Colaborador/EditarColaborador";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -23,7 +23,7 @@ import {
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import PerfilData from "./PerfilData";
-import { editProfile } from "redux/actions/Colaboradores";
+import { editProfile } from "../../redux/actions/Colaboradores";
 import { Img } from "./Styles";
 
 const Perfil = () => {

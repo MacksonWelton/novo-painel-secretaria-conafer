@@ -34,7 +34,7 @@ import { deleteContracts, downloadContracts, newComment, newContracts } from "..
 import ContratosData from "./ContratosData";
 import { CardHeaderStyled, InputStyled, Tr } from "./styles";
 import ProgressCard from "../../../components/ProgressCard/ProgressCard";
-import BotoesDeAcao from "components/BotoesDeAcao/BotoesDeAcao";
+import BotoesDeAcao from "../../../components/BotoesDeAcao/BotoesDeAcao";
 
 const Contratos = () => {
   const dispatch = useDispatch();
