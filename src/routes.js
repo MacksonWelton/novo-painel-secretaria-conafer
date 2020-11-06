@@ -4,10 +4,10 @@ import Login from "views/Login/Login.js";
 import RecuperarSenha from "views/RecuperarSenha/RecuperarSenha";
 
 //Secretaria
+import Secretaria from "views/GerenciarSecretaria/Secretaria/Secretaria";
 import Colaboradores from "views/GerenciarSecretaria/Colaboradores/Colaboradores";
 import ContratosSecretaria from "views/GerenciarSecretaria/Contratos/Contratos";
 import Orcamentos from "views/GerenciarSecretaria/Orcamentos/Orcamentos";
-import ProjetosSecretaria from "views/Projetos/Projetos";
 
 //Secretário e Colaboradores
 import Projetos from "views/Projetos/Projetos";
@@ -58,15 +58,15 @@ var routes = [
         component: Colaboradores,
         layout: "/admin",
       },
-      {
-        show: true,
-        path: "/secretaria/projetos",
-        name: "Projetos",
-        icon: "fas fa-project-diagram text-info",
-        component: ProjetosSecretaria,
-        layout: "/admin",
-      },
     ],
+  },
+  {
+    show: false,
+    path: "/secretaria",
+    name: "Secretaria",
+    icon: "ni ni-single-copy-04 text-green",
+    component: Secretaria,
+    layout: "/admin",
   },
   {
     show: true,
@@ -124,7 +124,7 @@ var routes = [
     ],
   },
   {
-    show: true,
+    show: false,
     path: "/user-profile",
     name: "Meu Perfil",
     icon: "ni ni-single-02 text-black",
